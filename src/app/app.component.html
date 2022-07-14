@@ -1,0 +1,164 @@
+<nb-layout>
+  <nb-layout-header>
+    <div>
+      <img class="header-logo cursor-pointer"
+           src="../assets/images/layout/header-logo.png"
+           alt="header-logo"
+           routerLink="/">
+    </div>
+    <!-- Devices of 1200px and above -->
+    <div class="d-none d-xl-inline flex-fill">
+      <div class="d-flex justify-content-end align-items-center">
+        <ng-container *ngFor="let menuItem of headerMenuItems">
+          <a *ngIf="menuItem.link" class="no-select header-link mx-4" [routerLink]="menuItem.link" [routerLinkActive]="'active'">
+            {{menuItem.title}}
+          </a>
+          <a *ngIf="menuItem.url" class="no-select header-link mx-4" [href]="menuItem.url" target="_blank">
+            {{menuItem.title}}
+          </a>
+        </ng-container>
+        <div class="mx-4">
+          <button nbButton shape="round" size="medium" status="success" outline type="button" class="fw-bold" [nbContextMenu]="boofiHeaderMenuItems" style="max-height: 40px">
+            <div class="d-inline-block me-2">
+              <img src="/assets/images/general/boofi-ghost.svg" style="max-height: 26px">
+            </div>
+            <span [@fadeInOnEnter] *ngIf="boofiPriceInUsd; else LoadingBoofiPrice" class="text-custom-yellow">
+              {{boofiPriceInUsd | currency:'USD':'symbol':'1.0-2'}}
+            </span>
+            <ng-template #LoadingBoofiPrice>
+              <div [@fadeInOnEnter] style="min-width: 38px">
+                <ngx-skeleton-loader [theme]="'standard' | skeleton"></ngx-skeleton-loader>
+              </div>
+            </ng-template>
+          </button>
+        </div>
+        <button *ngIf="user?.address; else ConnectWallet" nbButton shape="round" size="medium" status="basic" type="button" class="fw-bold" [nbContextMenu]="[updateProfileMenu, disconnectWalletMenu]">
+          <nb-icon pack="boofi" icon="wallet"></nb-icon> {{user!.address!.toLowerCase() | slice:0:6}}....{{user!.address | slice:38:42}}
+        </button>
+        <ng-template #ConnectWallet>
+          <button nbButton shape="round" size="medium" status="basic" type="button" class="fw-bold" [disabled]="loadingWalletConnection"
+                  (click)="connectWallet()" [nbSpinner]="loadingWalletConnection" [ngClass]="{'disabled': loadingWalletConnection}">
+            Connect Wallet
+          </button>
+        </ng-template>
+      </div>
+    </div>
+    <!-- Devices of 991 and below  -->
+    <div class="d-flex flex-row-reverse align-items-center flex-fill d-xl-none">
+      <nb-icon pack="boofi" icon="menu-toggle"
+               class="icon-xl mt-3 cursor-pointer"
+               [nbContextMenu]="[
+                  user == null ? connectWalletMenu : {
+                    icon: {pack: 'boofi', icon: 'wallet'},
+                    title: (user?.address | slice:0:6) + '...' + (user?.address | slice:36:42),
+                    children: [updateProfileMenu, disconnectWalletMenu]
+                  },
+                  {
+                    icon: {pack: 'boofi', icon: 'boofi'},
+                    title: boofiTickerTitle,
+                    children: boofiHeaderMenuItems
+                  },
+                  {
+                    title: 'Home',
+                    link: '/'
+                  },
+                  {
+                    title: 'Vault',
+                    link: '/vault'
+                  },
+                  {
+                    title: 'Cauldron',
+                    link: '/cauldron'
+                  },
+                  {
+                    title: 'Stake',
+                    link: '/stake'
+                  },
+                  {
+                    title: 'Battle',
+                    link: '/battle'
+                  },
+                  {
+                    title: 'Well of Souls',
+                    link: '/well-of-souls'
+                  },
+                  {
+                    title: 'Docs',
+                    url: 'https://boofinance.gitbook.io/boo-finance/'
+                  }
+              ]">
+      </nb-icon>
+    </div>
+  </nb-layout-header>
+
+  <nb-layout-column>
+    <nb-alert status="info" class="header-alert mx-0 px-0 text-center py-2 text-custom-yellow">
+       <span [@fadeInOnEnter] *ngIf="marketSize">
+         Total Market Size: {{marketSize.totalTVL.toString() | currency:'USD':'symbol':'1.0-0'}}
+       </span>
+       <span [@fadeInOnEnter] *ngIf="marketSize == null">
+         Loading Market Size...
+       </span>
+    </nb-alert>
+    <app-alert-countdown></app-alert-countdown>
+    <div class="container px-0 px-md-1 mt-5">
+      <router-outlet></router-outlet>
+    </div>
+  </nb-layout-column>
+
+  <nb-layout-footer>
+    <div class="container mt-3 pt-3">
+      <div class="row">
+        <div class="col-md-6 text-start">
+          <img class="header-logo cursor-pointer"
+               src="../assets/images/layout/header-logo.png"
+               alt="header-logo"
+               routerLink="/">
+          <div class="ms-2">
+            <span class="mt-2 d-block">
+              The beginning of DeFi 3.0
+            </span>
+            <div class="mt-4">
+              <small class="d-block small-header">Follow us</small>
+              <div class="mt-2">
+                <a href="https://twitter.com/Boo_Finance" target="_blank" class="me-4">
+                  <nb-icon pack="boofi" icon="twitter" class="icon-lg text-white cursor-pointer"></nb-icon>
+                </a>
+                <a href="https://discord.gg/boofinance" target="_blank" class="me-4">
+                  <nb-icon pack="boofi" icon="discord" class="icon-lg text-white cursor-pointer"></nb-icon>
+                </a>
+                <a href="https://t.me/BooFinance" target="_blank" class="me-4">
+                  <nb-icon pack="boofi" icon="telegram" class="icon-lg text-white cursor-pointer"></nb-icon>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="ms-2 mt-3 text-start">
+            <small class="text-white opacity-50">
+              {{!production? 'Staging ' : ''}}v{{version}}
+            </small>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="ms-2 mt-3 mt-lg-0">
+            <small class="d-block small-header">
+              Navigation
+            </small>
+            <div class="mt-3">
+              <ng-container *ngFor="let menuItem of headerMenuItems">
+                <a *ngIf="menuItem.link" class="d-block header-link text-white" [routerLink]="menuItem.link">
+                  {{menuItem.title}}
+                </a>
+                <a *ngIf="menuItem.url" class="d-block header-link text-white" [href]="menuItem.url" target="_blank">
+                  {{menuItem.title}}
+                </a>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nb-layout-footer>
+</nb-layout>
+
+

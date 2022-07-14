@@ -1,0 +1,37 @@
+// Override Bootstrap 5 variables
+// Break points
+$grid-breakpoints: (
+  xs: 0,
+  is: 400px,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px,
+  xxxl: 1600px,
+);
+
+// Inputs
+$input-border-radius-lg: 16px;
+$input-border-radius: 16px;
+$input-btn-focus-color: #50CC94;
+$input-btn-focus-box-shadow: 0 0 0 0.2rem rgba(96, 217, 124, 0.25);
+$input-focus-border-color: none;
+
+// Table
+$table-striped-color: #ffffff;
+
+$spacer: 1rem !default;
+$spacers: (
+  0: 0,
+  1: $spacer * .25,
+  2: $spacer * .5,
+  3: $spacer,
+  4: $spacer * 1.5,
+  5: $spacer * 3,
+  6: $spacer * 5,
+  7: $spacer * 7,
+  8: $spacer * 9,
+  9: $spacer * 12,
+  10: $spacer * 15,
+) !default;

@@ -1,0 +1,180 @@
+.cursor-pointer {
+  cursor: pointer !important;
+}
+
+.hr-dashed-shamrock {
+  border-top: 4px dashed #24865b;
+  background: none;
+}
+
+.hr-dashed-gray {
+  border-top: 4px dashed rgba(255, 255, 255, 0.5);
+  background: none;
+}
+
+.text-shamrock {
+  color: #39DB93 !important;
+}
+
+.text-light-red {
+  color: #FF6666 !important;
+}
+
+.text-gold {
+  color: #FFD700 !important;
+}
+
+.text-silver {
+  color: #C0C0C0 !important;
+}
+
+.text-bronze {
+  color: #CD7F32 !important;
+}
+
+.card-rounded {
+  @extend .card;
+  border: none !important;
+  border-radius: 38px;
+  padding: 0;
+  .card-header {
+    padding: 0;
+    border: none;
+    .card-rounded-tabs {
+      .first-tab.inactive {
+        background-color: #0A1914;
+        border-top-left-radius: 38px;
+        color: #848C89;
+        cursor: pointer !important;
+      }
+      .first-tab{
+        border-bottom-right-radius: 40px;
+        border-top-left-radius: 40px;
+      }
+      .last-tab.inactive{
+        background-color: #0A1914;
+        border-top-right-radius: 38px;
+        color: #848C89;
+        cursor: pointer !important;
+      }
+      .last-tab{
+        border-bottom-left-radius: 40px;
+      }
+      div {
+        color: white;
+        padding: 20px 0 20px 25px;
+        cursor: default;
+      }
+    }
+  }
+  .stake-active{
+    border-radius: 40px 40px 0 0;
+  }
+}
+
+.card-information {
+  @extend .card;
+  background-color: transparent !important;
+  border: none !important;
+  border-radius: 38px;
+  padding: 0;
+  .card-header, .card-body, .card-footer {
+    padding: 0;
+    border: none;
+  }
+  .card-body {
+    border-radius: 38px;
+    &.hint-available {
+      border-bottom-left-radius: 0 !important;
+      border-bottom-right-radius: 0 !important;
+    }
+  }
+  .card-footer {
+    border-bottom-left-radius: 38px;
+    border-bottom-right-radius: 38px;
+    &.toggled-help {
+      transition: 0.25s padding-top linear, 0.25s padding-bottom linear;
+    }
+  }
+}
+
+
+// NGX-Skeleton styles
+ngx-skeleton-loader {
+  display: block !important;
+  margin-bottom: -5px;
+}
+
+.loader {
+  margin-bottom: 0 !important;
+}
+
+.loader.progress::before {
+  background-image: linear-gradient(90deg,hsla(0,0%,100%,0), hsla(153, 69%, 54%, 0.45),hsla(0,0%,100%,0)) !important;
+}
+
+.unselectable {
+  user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -o-user-select: none;
+  pointer-events: none;
+}
+
+.flex-even {
+  flex: 1;
+}
+
+.lh-27 {
+  line-height: 27px !important;
+}
+
+.chatty-ghost {
+  position: relative;
+  img {
+    position: absolute;
+    top: -24px;
+    max-width: 158px;
+    left: 18%;
+  }
+}
+
+.border-light-transparent {
+  border: 4px solid rgba(72, 101, 89, 1) !important;
+}
+
+.border-light-gray-transparent {
+  border: 2.5px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+.rotate180 {
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+}
+
+.no-select {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+}
+
+.boofi-tooltip {
+  @extend .p-3;
+  @extend .m-4;
+  background-color: #000000;
+  border-radius: 15px;
+  max-width: 300px;
+}
+
+.fs-tiny {
+  font-size: 0.45em;
+}
+
+.text-glowing-white {
+  color: #FFFFFF;
+  text-shadow: -2px -2px 5px #ADE4C0, 2px 2px 5px #8BC172;
+}

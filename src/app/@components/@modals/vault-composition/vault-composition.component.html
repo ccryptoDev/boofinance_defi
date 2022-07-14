@@ -1,0 +1,117 @@
+<div [@enter] class="position-relative dialog-lg bg-main p-2 p-sm-3 p-md-5">
+  <div class="container-lg">
+    <button (click)="close()" size="large" type="button" style="position: absolute; top: -6px; right: -6px" nbButton shape="round" class="text-black">
+      <nb-icon icon="x" pack="boofi"></nb-icon>
+    </button>
+    <div class="dialog-body">
+      <div class="row gy-4" [nbSpinner]="chartData == null || vaultComposition == null || chartData?.length == 0 || vaultComposition?.tokensDetailsMap?.size == 0" nbSpinnerStatus="success" nbSpinnerMessage="Loading Composition">
+        <div class="col-lg-5 order-last order-lg-first">
+          <h3 class="d-none d-lg-block mb-5">Vault Composition</h3>
+          <ng-container *ngIf="vaultComposition && vaultComposition!.tokensDetailsMap.size > 0">
+            <div class="d-none d-lg-block">
+              <table [@fadeInOnEnter] class="table table-borderless table-striped align-middle">
+                <thead>
+                <tr>
+                  <th>
+                    <small class="text-white opacity-50">
+                      #
+                    </small>
+                  </th>
+                  <th>
+                    <small class="text-white opacity-50">
+                      Token
+                    </small>
+                  </th>
+                  <th>
+                    <small class="text-white opacity-50">
+                      Liquidity
+                    </small>
+                  </th>
+                  <th>
+                    <small class="text-white opacity-50">
+                      Percentage
+                    </small>
+                  </th>
+                </tr>
+                </thead>
+                <tbody>
+                  <tr class="text-white" *ngFor="let keyValue of vaultComposition!.tokensDetailsMap! | keyvalue | sortCauldronTokensDetails | paginate:{itemsPerPage: 6, currentPage: currentPage}; index as index">
+                    <td class="fs-5">
+                      {{index + ((currentPage - 1) * 6) + 1}}
+                    </td>
+                    <td>
+                      <ng-container *ngIf="keyValue.value?.tokenAddress && tokens.has(keyValue.value.tokenAddress!.toLowerCase())">
+                        <app-token-preview [token]="tokens.get((keyValue.value!.tokenAddress!.toLowerCase()))"></app-token-preview>
+                      </ng-container>
+                    </td>
+                    <td class="fs-5">
+                      {{ keyValue.value.liquidityInUsd | currency:'USD'}}
+                    </td>
+                    <td class="fs-5">
+                      {{ keyValue.value.percentageOfComposition | number:'1.0-2'}}%
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="text-center mt-5">
+                <pagination-controls
+                  [autoHide]="true"
+                  [responsive]="true"
+                  (pageChange)="currentPage = $event"
+                ></pagination-controls>
+              </div>
+            </div>
+            <div class="d-block d-lg-none">
+              <div class="card bg-light-dark-transparency my-2" *ngFor="let keyValue of vaultComposition!.tokensDetailsMap! | keyvalue | sortCauldronTokensDetails | paginate:{itemsPerPage: 6, currentPage: currentPage}; index as index">
+                <div class="card-body text-white py-2 pb-3" [@fadeInOnEnter]>
+                  <div class="text-center">
+                    <small class="d-block opacity-50">Token</small>
+                    <div class="mt-2 d-flex justify-content-center">
+                      <ng-container *ngIf="keyValue.value?.tokenAddress && tokens.has(keyValue.value!.tokenAddress!.toLowerCase())">
+                        <app-token-preview [token]="tokens.get((keyValue.value!.tokenAddress!.toLowerCase()))"></app-token-preview>
+                      </ng-container>
+                    </div>
+                    <small class="d-block opacity-50">Liquidity</small>
+                    <span class="fs-5 d-block">
+                    {{ keyValue.value.liquidityInUsd | currency:'USD'}}
+                  </span>
+                    <small class="d-block opacity-50">Percentage</small>
+                    <span class="fs-5 d-block">
+                    {{ keyValue.value.percentageOfComposition | number:'1.0-2'}}%
+                  </span>
+                  </div>
+                </div>
+              </div>
+              <div class="text-center mt-5">
+                <pagination-controls
+                  [autoHide]="true"
+                  [responsive]="true"
+                  (pageChange)="currentPage = $event"
+                ></pagination-controls>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+        <div class="col-lg-7 order-lg-last order-first text-center">
+          <h3 class="mt-4 pt-4 d-block d-lg-none mb-3">Cauldron Composition</h3>
+          <div class="mt-0 mt-lg-5" [ngStyle]="{'height.px': getCurrentChartSize()}">
+            <div [@fadeInOnEnter] *ngIf="chartData && chartData.length > 0">
+              <google-chart
+                [type]="chartType"
+                [data]="chartData"
+                [options]="chartOptions"
+                [dynamicResize]="true"
+                [height]="chartWidth"
+                [width]="chartWidth"
+                style="width: 100%">
+              </google-chart>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center my-4">
+        <button nbButton status="success" shape="round" class="px-5" (click)="close()">OK</button>
+      </div>
+    </div>
+  </div>
+</div>

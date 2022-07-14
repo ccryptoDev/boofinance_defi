@@ -1,0 +1,40 @@
+body, .bg-main {
+  background-image: url('../assets/images/layout/app-background.png') !important;
+  background-repeat: repeat;
+  background-size: cover;
+}
+
+.bg-shamrock {
+  background-color: #50CC94;
+}
+
+.bg-light-transparency-gradient {
+  background: linear-gradient(180deg, rgba(80, 204, 148, 0.4) 0%, rgba(80, 204, 148, 0.15) 100%);
+}
+
+.bg-light-transparency-a-15 {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.bg-light-transparency-a-19 {
+  background-color: rgba(255, 255, 255, 0.19);
+}
+
+.bg-light-dark-transparency {
+  background-color: rgba(0, 0, 0, 0.16);
+  box-shadow: rgba(0, 0, 0, 0.30) 0 0 35px inset;
+}
+
+.bg-cauldron-1 {
+  background: #0A1914 url('../assets/images/cauldron/bg-cauldron-1.png') no-repeat right;
+  background-size: cover;
+}
+
+.bg-cauldron-2 {
+  background: #0A1914 url('../assets/images/cauldron/bg-cauldron-2.png') no-repeat right;
+  background-size: cover;
+}
+
+.bg-dark-gradient {
+  background: linear-gradient(to right, rgba(5,85,44,0.35), rgba(31,113,105,0.4), rgba(5,85,44,0.35));
+}

@@ -1,0 +1,60 @@
+@import "~bootstrap/scss/mixins/_breakpoints";
+
+.paginated-tokens-container {
+  height: 580px;
+}
+
+@include media-breakpoint-up(xl) {
+  .paginated-tokens-container {
+    height: 400px;
+  }
+}
+
+google-chart {
+  > div:first-child {
+    display: inline-block !important;
+    text-align: center !important;
+  }
+}
+
+google-chart {
+  svg {
+    background: url('../assets/images/cauldron/composition-chart-background.png') no-repeat;
+    background-size: contain;
+    background-position: left -8px center !important;
+  }
+}
+
+
+@include media-breakpoint-up(sm) {
+  google-chart {
+    svg {
+      background-position: left -12px center !important;
+    }
+  }
+}
+
+@include media-breakpoint-up(md) {
+  google-chart {
+    svg {
+      background-position: left -14px center !important;
+    }
+  }
+}
+
+
+@include media-breakpoint-up(lg) {
+  google-chart {
+    svg {
+      background-position: left -14px center !important;
+    }
+  }
+}
+
+@include media-breakpoint-up(xl) {
+  google-chart {
+    svg {
+      background-position: left -16px center !important;
+    }
+  }
+}

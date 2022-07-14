@@ -1,0 +1,275 @@
+<app-card-information-toggle
+  [displayHelp]="userConfiguration?.helpToggles?.howToStakeBoofi"
+  (onHelpToggled)="onHelpToggled()"
+  bodyClasses="bg-light-transparency-gradient border-light-transparent py-4"
+  bodyTitle="Stake"
+  bodyImageUrl="../../../assets/images/home/stake.png"
+  bodyDescription="Stake your BOOFI to immediately receive zBOOFI! zBOOFI is your ticket to entering the Well of Souls!"
+  toggleHelpTitle="How to stake BOOFI">
+  <div class="row vertical-grid-gray-lg mt-5">
+    <div class="col-lg-6 px-lg-4">
+      <span class="h5 text-shamrock fw-normal mb-2">
+        Enter the number of BOOFI you want to stake.
+      </span>
+      <p class="lh-27">
+        Note: If this is your first time interacting with the Stake contract, you must first click “APPROVE” to approve the contract
+      </p>
+      <hr class="hr-dashed-gray d-block d-lg-none my-3">
+    </div>
+    <div class="col-lg-6 px-lg-4">
+      <span class="h5 text-shamrock fw-normal mb-2">
+        Click “Stake”
+      </span>
+      <p class="lh-27">
+        Note: zBOOFI is an interest bearing token meaning it is always growing in BOOFI value. Without staking/unstaking BOOFI or gaining zBOOFI rewards in the Cauldron, this total will not change, only its underlying BOOFI value
+      </p>
+    </div>
+  </div>
+</app-card-information-toggle>
+
+<div class="row gy-4 mb-5">
+  <div class="col-12 col-lg-8">
+    <div class="card-rounded bg-light-transparency-a-19">
+      <div class="card-body px-5 pt-md-4 pb-md-4 pb-1">
+        <div class="text-center d-md-flex justify-content-between">
+          <div class="text-md-start">
+            <span class="h1 fw-bolder mt-0 mb-2 d-block">Staking APR</span>
+<!--            <a class="text-decoration-underline text-success">-->
+<!--              <span class="lead fw-bold text-shamrock">-->
+<!--                > View Stats-->
+<!--              </span>-->
+<!--            </a>-->
+          </div>
+          <div class="mt-4 mt-md-0">
+            <small class="fs-6 fw-normal d-block opacity-50">
+              Last 3 days APR
+            </small>
+            <span [@fadeInOnEnter] class="h1 fw-bolder d-block mt-2 mb-3" *ngIf="boofiStakingDetails?.apr != null">
+              {{boofiStakingDetails!.apr | percent:'1.0-2'}}
+            </span>
+            <div class="mt-2 mb-3" *ngIf="boofiStakingDetails?.apr == null">
+              <ngx-skeleton-loader [theme]="'standard' | skeleton:3" animation="progress"></ngx-skeleton-loader>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-rounded bg-light-transparency-a-19 mt-4">
+      <div class="card-header stake-active" [ngClass]="{'unstake-active': stakingMode == StakingModeEnum.Withdraw}">
+        <div class="card-rounded-tabs d-flex justify-content-between">
+          <div class="flex-even first-tab"
+               (click)="stakingMode = StakingModeEnum.Deposit"
+               [ngClass]="{'inactive': stakingMode == StakingModeEnum.Withdraw}">
+            <span class="fw-bold fs-3 ms-md-3 no-select">
+              Stake
+            </span>
+          </div>
+          <div class="flex-even last-tab"
+               (click)="stakingMode = StakingModeEnum.Withdraw"
+               [ngClass]="{'inactive': stakingMode == StakingModeEnum.Deposit}">
+            <span class="fw-bold fs-3 ms-md-3 no-select">
+              Unstake
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="card-body px-4 py-4">
+        <div class="row mb-4">
+          <div class="col-md-7">
+            <small class="fs-6 fw-normal d-block opacity-50 my-2">
+              Current exchange rate
+            </small>
+            <app-stake-exchange-rate [boofiStakingDetails]="boofiStakingDetails"></app-stake-exchange-rate>
+          </div>
+          <div class="col-md-5" *ngIf="stakingMode == StakingModeEnum.Withdraw">
+            <small [@fadeInOnEnter]  class="fs-6 fw-normal d-block opacity-50 my-2">
+              Dynamic Withdrawal Fee
+            </small>
+            <ng-container *ngIf="withdrawalFee != null">
+              <span [@fadeInOnEnter] class="d-block fs-5 {{dynamicWithdrawalFeeClass}}">
+                <nb-icon pack="boofi" icon="skull"></nb-icon>
+                <nb-icon pack="boofi" icon="skull" *ngIf="this.withdrawalFee >= 0.099"></nb-icon>
+                <nb-icon pack="boofi" icon="skull" *ngIf="this.withdrawalFee >= 0.10"></nb-icon>
+                {{withdrawalFee | percent:'1.0-2'}}
+              </span>
+            </ng-container>
+            <ng-container *ngIf="withdrawalFee == null">
+              <ngx-skeleton-loader [@fadeInOnEnter] [theme]="'standard' | skeleton:1.3" animation="progress"></ngx-skeleton-loader>
+            </ng-container>
+          </div>
+        </div>
+        <ng-container *ngIf="stakingMode == StakingModeEnum.Deposit">
+          <ng-container *ngIf="loadingBoofiAllowance == false; else LoadingAllowances">
+            <div *ngIf="user == null || userBoofiAllowance?.gte(minimumAllowanceToRequestApproval); else ApproveAllowance" [@fadeInOnEnter] class="row gy-2 my-2">
+              <div class="col-md-7">
+                <label for="stake" class="visually-hidden-focusable">
+                  Stake
+                </label>
+                <nb-form-field>
+                  <input nbInput shape="semi-round" fieldSize="large" fullWidth status="basic" [formControl]="depositAmountControl" id="stake" type="text" placeholder="0.0 BOOFI">
+                  <button nbSuffix size="small" nbButton shape="semi-round" class="me-2 btn-ghost" (click)="maxUserStakeBalance()" [disabled]="!user || loadingDepositTransaction">
+                    MAX
+                  </button>
+                </nb-form-field>
+                <div class="mt-2" *ngIf="depositAmountControl.value && depositAmountControl.invalid && (depositAmountControl.dirty || depositAmountControl.touched)">
+                  <span class="text-danger d-block" *ngIf="depositAmountControl.errors?.invalidValue">
+                    The provided amount is invalid
+                  </span>
+                  <span class="text-danger d-block" *ngIf="depositAmountControl.errors?.cannotBeZero">
+                    The amount must be higher than 0
+                  </span>
+                  <span class="text-danger d-block" *ngIf="depositAmountControl.errors?.exceedsBalance">
+                    This amount exceeds your BOOFI balance
+                  </span>
+                </div>
+                <div class="d-md-flex mt-2 align-items-center" *ngIf="depositAmountControl.value && (loadingDepositTransaction ? true : depositAmountControl.valid)">
+                  <div>
+                    <span class="fs-6">
+                      You should receive:
+                    </span>
+                  </div>
+                  <div class="flex-grow-1 mx-md-2">
+                    <span class="fs-6" *ngIf="expectedZboofiReceived">
+                      {{expectedZboofiReceived | formatUnits}} zBOOFI
+                    </span>
+                    <ngx-skeleton-loader *ngIf="expectedZboofiReceived == null" [theme]="'standard' | skeleton:1.2" animation="progress"></ngx-skeleton-loader>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-5">
+                <button nbButton status="success" shape="round" size="large" fullWidth
+                        [nbSpinner]="loadingDepositTransaction" nbSpinnerMessage="Waiting Confirmation"
+                        (click)="deposit()"
+                        [disabled]="user == null || depositAmountControl.invalid || loadingDepositTransaction">
+                  <span [ngStyle]="{'opacity': loadingDepositTransaction ? 0 : 1}">
+                    Stake
+                  </span>
+                </button>
+              </div>
+            </div>
+            <ng-template #ApproveAllowance>
+              <div class="mt-3 mb-2">
+                <button nbButton status="success" shape="round"
+                        size="large"
+                        *ngIf="!failedLoadingBoofiAllowance"
+                        fullWidth (click)="approveBoofiAllowance()"
+                        [disabled]="loadingApproveAllowanceTransaction"
+                        nbSpinnerMessage="Waiting Confirmation"
+                        [nbSpinner]="loadingApproveAllowanceTransaction">
+                  <span [ngStyle]="{'opacity': loadingApproveAllowanceTransaction ? 0 : 1}">Approve</span>
+                </button>
+                <div *ngIf="failedLoadingBoofiAllowance">
+                  <button nbButton size="large" status="success" shape="round" fullWidth (click)="getUserBoofiAllowance()">
+                    Reload Allowance
+                  </button>
+                  <div class="text-center">
+                    <small class="text-danger">We were unable to verify your BOOFI allowance</small>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </ng-container>
+          <ng-template #LoadingAllowances>
+            <div class="mt-3 mb-2">
+              <button nbButton status="primary" shape="round" size="large" fullWidth [nbSpinner]="loadingBoofiAllowance" nbSpinnerMessage="Loading Allowances" [disabled]="loadingBoofiAllowance">
+                <span style="opacity: 0">Approve</span>
+              </button>
+            </div>
+          </ng-template>
+        </ng-container>
+        <ng-container *ngIf="stakingMode == StakingModeEnum.Withdraw">
+          <div [@fadeInOnEnter] class="row gy-2 my-2">
+            <div class="col-md-7">
+              <label for="unstake" class="visually-hidden-focusable">
+                Unstake
+              </label>
+              <nb-form-field>
+                <input nbInput shape="semi-round" fieldSize="large" fullWidth status="basic" [formControl]="withdrawAmountControl" id="unstake" type="text" placeholder="0.0 zBOOFI">
+                <button nbSuffix size="small" nbButton shape="semi-round" class="me-2 btn-ghost" (click)="maxUserUnstakeBalance()" [disabled]="!user || loadingWithdrawTransaction">
+                  MAX
+                </button>
+              </nb-form-field>
+              <div class="mt-2"
+                   *ngIf="withdrawAmountControl.value && withdrawAmountControl.invalid && (withdrawAmountControl.dirty || withdrawAmountControl.touched)">
+                <span class="text-danger d-block" *ngIf="withdrawAmountControl.errors?.invalidValue">
+                  The provided amount is invalid
+                </span>
+                <span class="text-danger d-block" *ngIf="withdrawAmountControl.errors?.cannotBeZero">
+                  The amount must be higher than 0
+                </span>
+                <span class="text-danger d-block" *ngIf="withdrawAmountControl.errors?.exceedsBalance">
+                  This amount exceeds your zBOOFI balance
+                </span>
+              </div>
+              <div class="d-md-flex mt-2 align-items-center" *ngIf="withdrawAmountControl.value && (loadingWithdrawTransaction ? true : withdrawAmountControl.valid)">
+                <div>
+                  <span class="fs-6">
+                    You should receive:
+                  </span>
+                </div>
+                <div class="flex-grow-1 mx-md-2">
+                  <span class="fs-6" *ngIf="expectedBoofiReceived">
+                    {{expectedBoofiReceived | formatUnits}} BOOFI
+                  </span>
+                  <ngx-skeleton-loader *ngIf="expectedBoofiReceived == null" [theme]="'standard' | skeleton:1.2" animation="progress"></ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-5">
+              <button nbButton status="success" shape="round" size="large" fullWidth (click)="withdraw()"
+                      [nbSpinner]="loadingWithdrawTransaction" nbSpinnerMessage="Waiting Confirmation"
+                      [disabled]="user == null || withdrawAmountControl.invalid || loadingWithdrawTransaction">
+                <span [ngStyle]="{'opacity': loadingWithdrawTransaction ? 0 : 1}">
+                  Unstake
+                </span>
+              </button>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+  <div class="order-first order-lg-last col-12 col-lg-4">
+    <div class="card-rounded bg-light-transparency-a-19">
+      <div class="card-body p-4">
+        <div class="row gy-3 gy-lg-5">
+          <div class="col-md-6 col-lg-12 text-center text-md-start">
+            <span class="h3 mt-0 mb-2 d-block">Balance</span>
+            <div class="d-md-flex">
+              <img src="../../../assets/images/general/boofi-golden-zombie.gif" class="img-fluid img-user-details p-1" alt="Zombie">
+              <div class="mt-3 mt-md-0 mx-3 align-self-end">
+                <span class="mb-1 ms-1 d-block fs-5">
+                  zBoofi
+                </span>
+                <span [@fadeInOnEnter] *ngIf="userZboofiBalance" class="ms-1 h2 m-0 d-block">
+                  {{userZboofiBalance  | formatUnits}}
+                </span>
+                <div class="mt-2 mt-md-0" *ngIf="userZboofiBalance == null" style="min-width: 150px">
+                  <ngx-skeleton-loader [theme]="'standard' | skeleton:2.55" [animation]="user ? 'progress' : 'false'"></ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-12 text-center text-md-start">
+            <span class="h3 mt-0 mb-2 d-block">Unstaked</span>
+            <div class="d-md-flex">
+              <img src="../../../assets/images/general/boofi-ghost.svg" class="img-fluid img-user-details p-3" alt="Ghost">
+              <div class="mt-3 mt-md-0 mx-3 align-self-end">
+                <span class="mb-1 ms-1 d-block fs-5">
+                  Boofi
+                </span>
+                <span [@fadeInOnEnter] *ngIf="userBoofiBalance" class="ms-1 h2 m-0 d-block">
+                  {{userBoofiBalance  | formatUnits}}
+                </span>
+                <div class="mt-2 mt-md-0" *ngIf="userBoofiBalance == null" style="min-width: 150px">
+                  <ngx-skeleton-loader [theme]="'standard' | skeleton:2.55" [animation]="user ? 'progress' : 'false'"></ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

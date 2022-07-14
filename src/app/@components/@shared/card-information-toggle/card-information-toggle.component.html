@@ -1,0 +1,75 @@
+<div class="card-information {{displayHelp ? 'mb-8' : 'mb-4'}}">
+  <div class="card-body px-5 {{bodyClasses}}" [ngClass]="{'hint-available': displayHelp}">
+    <div class="row">
+      <div *ngIf="coveredBodyImage; else bodyImage" [ngClass]="{'col-lg-3': bodyImageUrl}" class="text-center" 
+        [ngStyle]="{'background': 'url(' + bodyImageUrl + ')', 'background-repeat': 'no-repeat', 'background-position': 'center center', 'background-size': 'contain'}">
+      </div>
+      <ng-template #bodyImage>
+        <div *ngIf="bodyImageUrl" [ngClass]="{'col-lg-3': bodyImageUrl}" class="text-center">
+          <img *ngIf="bodyImageUrl" [src]="bodyImageUrl" alt="Stake" class="img-fluid" [ngStyle]="{'max-height.px': bodyImageMaxHeight}">
+        </div>
+      </ng-template>
+      <div [ngClass]="{'col-lg-9': bodyImageUrl, 'col-lg-12': !bodyImageUrl}" class="col-lg-9">
+        <h1 class="mt-0 mb-2">{{bodyTitle}}</h1>
+        <p class="fw-normal fs-5 lh-base">
+          {{bodyDescription}}
+        </p>
+        <div class="d-lg-flex align-items-center">
+          <div class="pe-lg-4" *ngIf="customActionTitle">
+            <div class="d-flex align-items-center mt-4">
+              <nb-icon *ngIf="customActionIcon" [icon]="customActionIcon" class="icon-lg"></nb-icon>
+              <span class="ms-2 h6 my-0 fw-normal text-decoration-underline cursor-pointer" (click)="customActionClicked()">
+                <span class="text-decoration-underline no-select">
+                  {{customActionTitle}}
+                </span>
+              </span>
+            </div>
+          </div>
+          <div class="pe-lg-4" *ngIf="learnMoreUrl">
+            <div class="d-flex align-items-center mt-4">
+              <nb-icon icon="info-outline" class="icon-lg"></nb-icon>
+              <span class="ms-2 h6 my-0 fw-normal text-decoration-underline cursor-pointer" (click)="openLearnMore()">
+                <span class="text-decoration-underline no-select">
+                  Learn More
+                </span>
+              </span>
+            </div>
+          </div>
+          <div class="pe-lg-4">
+            <div [@fadeInOnEnter] *ngIf="!displayHelp" class="d-flex align-items-center mt-4">
+              <nb-icon pack="boofi" icon="puzzled" class="icon-lg"></nb-icon>
+              <span class="ms-2 h6 my-0 fw-normal text-decoration-underline cursor-pointer" (click)="toggleHelp()">
+                <span class="text-decoration-underline no-select">
+                  {{toggleHelpTitle}}?
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div [@collapse]="!displayHelp" [ngClass]="{'py-5': displayHelp, 'toggled-help': helpWasToggled}" class="px-5 card-footer bg-light-transparency-a-15">
+    <div class="d-flex justify-content-between align-items-center">
+      <div>
+        <div class="d-flex align-items-center mt-4">
+          <nb-icon pack="boofi" icon="puzzled" class="icon-xl"></nb-icon>
+          <h3 class="ms-2 my-0">
+            <span>
+              {{toggleHelpTitle}}
+            </span>
+          </h3>
+        </div>
+      </div>
+      <div>
+        <span class="fw-normal text-decoration-underline opacity-50 cursor-pointer" (click)="toggleHelp()">
+          <nb-icon icon="close-outline" class="icon-lg"></nb-icon>
+        </span>
+      </div>
+    </div>
+    <ng-content></ng-content>
+  </div>
+  <div *ngIf="displayHelp" class="chatty-ghost">
+    <img src="./assets/images/general/boofi-ghost-chat.svg">
+  </div>
+</div>

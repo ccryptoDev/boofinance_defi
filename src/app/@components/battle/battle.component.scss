@@ -1,0 +1,125 @@
+.mint-block {
+  background: #253A35;
+  border: 8px solid rgba(255, 255, 255, 0.2);
+  box-sizing: border-box;
+  border-radius: 34px;
+  margin-top: 1.5rem;
+
+  h6 {
+    margin-bottom: 0;
+    margin-top: 30px;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+    opacity: 0.8;
+  }
+  .mint-cost {
+    padding: 0 32px;
+    margin-bottom: 18px;
+    p {
+      font-weight: 400;
+      font-size: 18px;
+      line-height: 32px;
+      opacity: 0.5;
+      margin-bottom: 0;
+    }
+    span {
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 32px;
+      opacity: 0.5;
+    }
+    span.boofi-format {
+      font-size: 18px;
+      opacity: 1;
+    }
+  }
+}
+.unlock-block {
+  background: #253A35;
+  border: 8px solid rgba(255, 255, 255, 0.2);
+  box-sizing: border-box;
+  border-radius: 34px;
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+
+  &>div {
+    width: 50%;
+  }
+  .stat-block {
+    padding: 10px 0 30px 0;
+    .stat-item {
+      .stat-label {
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 1;
+        opacity: 0.5;
+        margin-top: 25px;
+        margin-bottom: 0;
+      }
+      .stat-info {
+        display: flex;
+        align-items: center;
+        padding: 20px 0;
+        gap: 10px;
+        .bar {
+          width: 60%;
+          position: relative;
+          background: #090909;
+          border-radius: 32px;
+          height: 18px;
+          div {
+            height: 18px;
+            position: absolute;
+            left: 0;
+            background: #50CC94;
+            border-radius: 32px;
+          }
+        }
+        .stats {
+          width: 40%;
+          font-weight: 700;
+          font-size: 16px;
+          line-height: 32px;
+          color: #fff;
+        }
+      }
+    }
+  }
+}
+.mint-btn {
+  margin-top: 30px;
+  button {
+    width: 204px;
+    height: 60px;
+    background: #50CC94;
+    border: 2px solid #50CC94;
+    border-radius: 54px;
+    font-size: 24px;
+    line-height: 36px;
+    text-align: center;
+    letter-spacing: 0.25px;
+    color: #ffffff;
+    transition: 0.3s;
+
+    &:hover {
+      border: 2px solid #fff;
+      opacity: 0.6;
+    }
+  }
+  .disable {
+    background: #666;
+    border: 2px solid #666;
+  }
+  p {
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 27px;
+    text-align: justify;
+  }
+}
+hr {
+  border: 1px dashed #000000;
+  margin: 0;
+}

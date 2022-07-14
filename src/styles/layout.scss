@@ -1,0 +1,102 @@
+@import "~bootstrap/scss/mixins/_breakpoints";
+@import "variables";
+
+.header-logo {
+  height: 46px;
+  max-width: 284px;
+}
+
+.header-link {
+  color: #A9A9A9 !important;
+  &:hover {
+    @extend .fw-bold;
+    color: #39DB93 !important;
+  }
+  &.active {
+    @extend .fw-bold;
+    color: #ffffff !important;
+  }
+  font-size: 18px;
+}
+
+.header-alert {
+  border-radius: 0 !important;
+  margin: -1rem -1rem 0 !important;
+  box-shadow: inset 2px 5px 3px #222130 !important;
+}
+
+.sub-header-alert {
+  border-radius: 0 !important;
+  margin: 0 -1rem 0 !important;
+}
+
+.sub-header-timer-text {
+  font-size: 2.5rem !important;
+}
+
+@include media-breakpoint-up(sm) {
+  .sub-header-timer-text {
+    font-size: 3rem !important;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .header-alert {
+    margin: -1.5rem -1.5rem -0.5rem !important;
+  }
+  .sub-header-alert {
+    margin: 0.5rem -1.5rem -0.5rem !important;
+  }
+  .sub-header-timer-text {
+    font-size: 3.5rem !important;
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  .header-alert {
+    margin: -2.25rem -2.25rem -0.75rem !important;
+  }
+  .sub-header-alert {
+    margin: 0.75rem -2.25rem -0.75rem !important;
+  }
+  .sub-header-timer-text {
+    font-size: 4rem !important;
+  }
+}
+
+.small-header {
+  color: #ADADAD;
+  font-weight: 800;
+  font-size: 12px;
+  line-height: 15px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+}
+
+body {
+  background: black;
+}
+
+.row {
+  @each $breakpoint in map-keys($grid-breakpoints) {
+    @include media-breakpoint-up($breakpoint) {
+      $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+      &.vertical-grid-shamrock#{$infix} > div[class^="col-"] {
+        border-left: 2px dashed rgba(36, 134, 91, 0.75);
+        border-right: 2px dashed rgba(36, 134, 91, 0.75);
+      }
+      &.vertical-grid-gray#{$infix} > div[class^="col-"] {
+        border-left: 2px dashed rgba(255, 255, 255, 0.4);
+        border-right: 2px dashed rgba(255, 255, 255, 0.4);
+      }
+    }
+  }
+  div[class^="col-"]:first-child {
+    border-left: none;
+  }
+  div[class^="col-"]:last-child {
+    border-right: none;
+  }
+}
+
+

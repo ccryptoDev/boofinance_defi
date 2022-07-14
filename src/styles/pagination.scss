@@ -1,0 +1,30 @@
+.ngx-pagination {
+  padding: 0 !important;
+
+  li {
+    font-size: 1.2rem !important;
+  }
+
+  .current {
+    background: #29684C !important;
+    border-radius: 50%;
+    padding: 0.3rem 0.625rem !important;
+  }
+
+  a {
+    color: white !important;
+    text-decoration: none !important;
+  }
+
+  a:hover {
+    background-color: transparent !important;
+    font-weight: bolder;
+    font-size: 1.25rem;
+    color: #39DB93 !important;
+  }
+
+  .disabled {
+    opacity: 30%;
+  }
+
+}

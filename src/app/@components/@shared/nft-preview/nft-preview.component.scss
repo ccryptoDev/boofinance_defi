@@ -1,0 +1,65 @@
+.nft-img {
+  img {
+    min-height: 80px;
+  }
+}
+.name {
+  h6 {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 32px;
+    color: #ffffff;
+    opacity: 0.8;
+    margin-bottom: 0;
+  }
+}
+.attr-wrapper {
+  .nft-attribute {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 10px;
+    margin: 6px 0;
+    .attr-icon {
+      width: 40%;
+      text-align: right;
+      img {
+        width: auto;
+      }
+    }
+    .attr-value {
+      width: 60%;
+      text-align: left;
+      margin-bottom: -3px;
+      p {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+.buy-btn {
+  margin-top: 6px;
+  button {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 28px;
+    letter-spacing: 0.25px;
+    color: #50CC94;
+    border: 2px solid #50CC94;
+    box-sizing: border-box;
+    border-radius: 54px;
+    width: 90%;
+    background: none;
+    transition: 0.3s;
+
+    &:hover {
+      background: #50CC94;
+      border: 2px solid #fff;
+      color: #333;
+      opacity: 0.6;
+    }
+  }
+}

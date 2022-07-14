@@ -1,0 +1,38 @@
+.home-heading {
+  font-size: calc(1.625rem + 1.75vw);
+  line-height: 1.2;
+}
+.paragraph-grey{
+  color: #CACACA;
+}
+.h1, h1{
+  margin: 0.30em 0;
+}
+
+#cauldron-frame {
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  top: 16%;
+  text-align: center;
+  img {
+    max-height: 220px;
+    padding: 1rem;
+  }
+}
+
+#well-of-souls-frame {
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  top: 10%;
+  text-align: center;
+  img {
+    max-height: 260px;
+    padding: 1rem;
+  }
+}

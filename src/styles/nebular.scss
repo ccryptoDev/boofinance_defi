@@ -1,0 +1,189 @@
+@import '../../node_modules/@nebular/theme/styles/theming';
+@import '../../node_modules/@nebular/theme/styles/themes/dark';
+@import "~bootstrap/scss/mixins/_breakpoints";
+
+$nb-themes: nb-register-theme((
+  // Inputs
+  input-basic-text-color: #222b45,
+  input-basic-background-color: #f7f9fc,
+  input-basic-border-color: #e4e9f2,
+  input-basic-focus-background-color: #ffffff,
+  input-basic-hover-background-color: #edf1f7,
+  input-basic-placeholder-text-color: #8f9bb3,
+  input-basic-focus-border-color: #50CC94,
+  input-basic-hover-border-color: #50CC94,
+  input-basic-disabled-background-color: rgba(143, 155, 179, 0.24),
+  input-basic-disabled-text-color: rgba(143, 155, 179, 0.48),
+  input-basic-disabled-placeholder-text-color: rgba(143, 155, 179, 0.48),
+  input-basic-disabled-border-color: rgba(143, 155, 179, 0.24),
+  input-danger-background-color: #f7f9fc,
+  input-danger-focus-background-color: #ffffff,
+  input-danger-hover-background-color: #edf1f7,
+  input-danger-text-color: #222b45,
+  input-danger-disabled-background-color: rgba(143, 155, 179, 0.24),
+  input-danger-disabled-text-color: rgba(143, 155, 179, 0.48),
+  input-danger-disabled-placeholder-text-color: rgba(143, 155, 179, 0.48),
+  input-danger-disabled-border-color: rgba(143, 155, 179, 0.24),
+  input-danger-placeholder-text-color: #8f9bb3,
+  input-large-text-font-weight: 400,
+  input-large-text-font-size: 1.25rem,
+  input-large-placeholder-text-font-size: 1.25rem,
+  input-semi-round-border-radius: 16px,
+  // Colors
+  color-primary-400: #39DB93,
+  // Layout
+  header-background-color: #191B1C,
+  footer-background-color: #020403,
+  layout-background-color: transparent,
+  header-shadow: none,
+  footer-shadow: none,
+  // Alerts
+  alert-info-text-color: #39DB93,
+  alert-info-background-color: #2D2E3E,
+  alert-text-font-weight: 800,
+  // General
+  color-success-hover: #39DB93,
+  button-filled-success-background-color: #39DB93,
+  link-text-decoration: none,
+  link-text-hover-color: #39DB93,
+  // Spinners
+  spinner-success-background-color: transparent,
+  // Buttons
+  outline-color: rgba(57, 219, 147, 0.1),
+  // Lists
+  list-item-divider-color: #2e4a3e,
+  // Fonts
+  text-heading-1-font-weight: 900
+), dark, dark);
+
+@import '~@nebular/theme/styles/globals';
+
+@include nb-install() {
+  @include nb-theme-global();
+};
+
+nb-layout-header nav {
+  @extend .container;
+  justify-content: space-between !important;
+};
+
+nb-layout-footer {
+  & nav {
+    background: nb-theme(footer-background-color) url('../assets/images/layout/app-footer-cemetery.svg') bottom no-repeat;
+    background-size: contain;
+    border-top: none !important;
+    min-height: 440px;
+  }
+}
+
+a:focus {
+  color: inherit !important;
+}
+
+.cdk-overlay-connected-position-bounding-box {
+  z-index: 2000 !important; // Fixes context menu not showing above Toastr Notifications
+}
+
+.toastr-overlay-container {
+  top: 4.75rem !important;
+}
+
+nb-toast {
+  margin-bottom: 12px !important;
+}
+
+.toastr-overlay-container {
+  overflow-y: hidden !important;
+}
+
+nb-context-menu {
+  background: rgb(29, 31, 36) none no-repeat scroll 0 0 !important;
+  box-shadow: 0 0 1rem 0.3rem rgba(255, 255, 255, 0.25) !important;
+  nb-menu .menu-item {
+    border-bottom: 1px solid white !important;
+    &:last-child {
+      border-bottom: none !important;
+    }
+    .active {
+      color: white !important;
+    }
+  }
+}
+
+.cdk-global-overlay-wrapper {
+  overflow-y: scroll;
+}
+
+nb-dialog-container {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.dialog-md {
+  border-radius: 25px;
+  width: 90vw !important;
+  margin: 10px 5px 5px !important;
+}
+
+.dialog-lg {
+  border-radius: 25px;
+  width: 90vw !important;
+  margin: 10px 5px 5px !important;
+}
+
+.dialog-body, .dialog-md {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  max-height: 90vh;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  ::-webkit-scrollbar {
+    display: none !important;
+  }
+}
+
+@include media-breakpoint-down(lg) {
+  .dialog-body, .dialog-md {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    max-height: 90vh;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    ::-webkit-scrollbar {
+      display: none !important;
+    }
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  .dialog-md {
+    width: 50vw !important;
+    margin: 20px 10px 10px !important;
+  }
+  .dialog-lg {
+    width: 80vw !important;
+    margin: 20px 10px 10px !important;
+  }
+}
+
+nb-spinner {
+  z-index: 998 !important;
+}
+
+.btn-ghost {
+  @extend .opacity-50;
+  border: none !important;
+  box-shadow: none !important;
+  background-color: transparent !important;
+  &:enabled:hover {
+    color: #39DB93 !important;
+  }
+}
+
+.context-menu {
+  text-align: left !important;
+}
+
+nb-menu .menu-item .menu-item:first-child {
+  border-top: 1px solid #ffffff !important;
+}

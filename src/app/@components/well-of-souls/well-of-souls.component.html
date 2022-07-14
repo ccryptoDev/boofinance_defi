@@ -1,0 +1,635 @@
+<app-card-information-toggle
+  [displayHelp]="userConfiguration?.helpToggles?.howToUseWellOfSouls"
+  (onHelpToggled)="onHelpToggled()"
+  bodyClasses="bg-light-transparency-gradient border-light-transparent py-4"
+  bodyTitle="Well of Souls"
+  bodyImageUrl="../../../assets/images/well-of-souls/well-of-souls.gif"
+  bodyDescription="Stake your zBOOFI to enter the Well of Souls! Staking zBOOFI allows you to earn a percentage of all of the BOOFI rewards straight out of the Cauldron! Harvesting your BOOFI rewards places you in competition to be among the Top Necromancers. Top Necromancers gain tons of additional benefits!"
+  toggleHelpTitle="How to Use The Well of Souls"
+  [bodyImageMaxHeight]="260"
+>
+  <div class="row vertical-grid-gray-lg mt-5">
+    <div class="col-lg-4 px-lg-4">
+      <span class="h5 text-shamrock fw-normal mb-2">
+        Stake zBOOFI
+      </span>
+      <ul class="list-unstyled">
+        <li class="lh-27">
+          a.  Enter the number of zBOOFI you want to stake in the Well of Souls.
+        </li>
+        <li class="lh-27">
+          b.  Click “Stake”
+        </li>
+      </ul>
+      <hr class="hr-dashed-gray d-block d-lg-none my-3">
+    </div>
+    <div class="col-lg-4 px-lg-4">
+      <span class="h5 text-shamrock fw-normal">
+        Harvest BOOFI Rewards!
+      </span>
+      <ul class="list-unstyled">
+        <li class="lh-27">
+          a.  Note your “Pending BOOFI rewards” displayed.
+        </li>
+        <li class="lh-27">
+          b.  Click “Harvest” to harvest your BOOFI rewards.
+        </li>
+      </ul>
+      <hr class="hr-dashed-gray d-block d-lg-none my-3">
+    </div>
+    <div class="col-lg-4 px-lg-4">
+      <span class="h5 text-shamrock fw-normal mb-2">
+        Top Necromancers
+      </span>
+      <ul class="list-unstyled">
+        <li class="lh-27">
+          a.  After your first harvest, you will see a rank displayed for yourself. The more rewards you harvest, the higher you climb on the leaderboard of Top Necromancers.
+        </li>
+        <li class="lh-27">
+          b.  Top Necromancers may enjoy additional rewards like BOOFI, AVAX, or even NFTs!
+        </li>
+      </ul>
+    </div>
+  </div>
+</app-card-information-toggle>
+
+<div class="row gy-4 mb-5">
+  <div class="col-12 col-xl-7">
+    <div class="card-rounded bg-light-transparency-a-19">
+      <div class="mx-3 card-body pt-4 pb-3">
+        <div class="mb-1 text-start">
+          <span class="h3 mt-0 mb-2 d-block">Top Necromancers</span>
+        </div>
+        <ng-container>
+          <!-- Table view MD Devices -->
+          <div class="d-none d-md-block">
+            <table *ngIf="harvesters"
+                   class="table table-responsive table-striped table-borderless align-middle mb-0 pb-0">
+              <thead>
+              <tr class="text-white opacity-50">
+                <th>
+                  Rank
+                </th>
+                <th></th>
+                <th>
+                  Ghost
+                </th>
+                <th>
+                  First Deposit
+                </th>
+                <th>
+                  Harvested BOOFI
+                </th>
+              </tr>
+              </thead>
+              <tbody>
+              <ng-container *ngIf="additionalUserDataInLeaderboard == 'top'">
+                <tr class="active-user-leaderboard-table-data" (click)="onGotoUserRankPage()">
+                  <td class="fs-5 text-shamrock">
+                    <div class="d-flex align-items-center">
+                      <span>
+                        {{userHarvester!.rank}}
+                      </span>
+                    </div>
+                  </td>
+                  <td>
+                    <ng-container *ngIf="user!.avatar && user!.avatarBackgroundColor; else DisplayDefaultAvatar">
+                      <app-avatar-preview [backgroundHexColor]="user!.avatarBackgroundColor" [avatar]="user!.avatar" size="xs"></app-avatar-preview>
+                    </ng-container>
+                    <ng-template #DisplayDefaultAvatar>
+                      <app-avatar-preview size="xs"></app-avatar-preview>
+                    </ng-template>
+                  </td>
+                  <td class="text-shamrock fs-5 text-break">
+                    <ng-container *ngIf="user!.nickname; else DisplayUserAddress">
+                      {{user!.nickname}}
+                    </ng-container>
+                    <ng-template #DisplayUserAddress>
+                      {{user!.address | slice:0:6}}...{{user!.address | slice:38:42}}
+                    </ng-template>
+                  </td>
+                  <td class="text-shamrock fs-5 opacity-50 text-break">
+                    {{userHarvester!.createdAt | date:'shortDate'}}
+                  </td>
+                  <td class="text-shamrock fs-5 text-break">
+                    {{userHarvester!.totalHarvestPoints | number:'1.0-2'}}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-white fs-5" *ngFor="let i of 5 | loopNumber" style="height: 54px">
+                    ...
+                  </td>
+                </tr>
+              </ng-container>
+              <tr *ngFor="let harvester of harvesters | paginate:{itemsPerPage: 12, currentPage: currentHarvestersPage, totalItems: totalHarvesters}" class="{{harvester.userAddress == userHarvester?.userAddress ? 'active-user-leaderboard-table-data' : ''}}">
+                <td class="fs-5 {{harvester.userAddress == userHarvester?.userAddress ? 'text-shamrock' : 'text-white'}}">
+                  <div class="d-flex align-items-center">
+                    <span>
+                      {{harvester?.rank}}
+                    </span>
+                  </div>
+                </td>
+                <td>
+                  <ng-container *ngIf="harvester.user?.avatar && harvester.user?.avatarBackgroundColor; else DisplayDefaultAvatar">
+                    <app-avatar-preview [backgroundHexColor]="harvester.user!.avatarBackgroundColor" [avatar]="harvester.user!.avatar" size="xs"></app-avatar-preview>
+                  </ng-container>
+                  <ng-template #DisplayDefaultAvatar>
+                    <app-avatar-preview size="xs"></app-avatar-preview>
+                  </ng-template>
+                </td>
+                <td class="fs-5 text-break {{harvester.userAddress == userHarvester?.userAddress ? 'text-shamrock' : 'text-white'}}">
+                  <ng-container *ngIf="harvester.user?.nickname; else DisplayUserAddress">
+                    {{harvester.user!.nickname}}
+                  </ng-container>
+                  <ng-template #DisplayUserAddress>
+                    {{harvester.userAddress | slice:0:6}}...{{harvester.userAddress | slice:38:42}}
+                  </ng-template>
+                </td>
+                <td class="fs-5 opacity-50 text-break {{harvester.userAddress == userHarvester?.userAddress ? 'text-shamrock' : 'text-white'}}">
+                  {{harvester.createdAt | date:'shortDate'}}
+                </td>
+                <td class="fs-5 text-break {{harvester.userAddress == userHarvester?.userAddress ? 'text-shamrock' : 'text-white'}}">
+                  {{harvester.totalHarvestPoints | number:'1.0-2'}}
+                </td>
+              </tr>
+              <ng-container *ngIf="additionalUserDataInLeaderboard == 'bottom'">
+                <tr>
+                  <td class="text-white fs-5" *ngFor="let i of 5 | loopNumber" style="height: 54px">
+                    ...
+                  </td>
+                </tr>
+                <tr class="active-user-leaderboard-table-data" (click)="onGotoUserRankPage()">
+                  <td class="fs-5 text-white">
+                    <div class="d-flex align-items-center">
+                      <span class="text-shamrock">
+                        {{userHarvester!.rank}}
+                      </span>
+                    </div>
+                  </td>
+                  <td>
+                    <ng-container *ngIf="user!.avatar && user!.avatarBackgroundColor; else DisplayDefaultAvatar">
+                      <app-avatar-preview [backgroundHexColor]="user!.avatarBackgroundColor" [avatar]="user!.avatar" size="xs"></app-avatar-preview>
+                    </ng-container>
+                    <ng-template #DisplayDefaultAvatar>
+                      <app-avatar-preview size="xs"></app-avatar-preview>
+                    </ng-template>
+                  </td>
+                  <td class="text-shamrock fs-5 text-break">
+                    <ng-container *ngIf="user!.nickname; else DisplayUserAddress">
+                      {{user!.nickname}}
+                    </ng-container>
+                    <ng-template #DisplayUserAddress>
+                      {{user!.address | slice:0:6}}...{{user!.address | slice:38:42}}
+                    </ng-template>
+                  </td>
+                  <td class="text-shamrock fs-5 opacity-50 text-break">
+                    {{userHarvester!.createdAt | date:'shortDate'}}
+                  </td>
+                  <td class="text-shamrock fs-5 text-break">
+                    {{userHarvester!.totalHarvestPoints | number:'1.0-2'}}
+                  </td>
+                </tr>
+              </ng-container>
+              </tbody>
+            </table>
+            <ngx-skeleton-loader *ngIf="harvesters == null" [theme]="'standard' | skeleton:2.8" animation="progress" [count]="user ? 16 : 14"></ngx-skeleton-loader>
+          </div>
+          <!-- Card view for devices lower than MD-->
+          <div class="d-block d-md-none">
+            <ng-container *ngIf="harvesters">
+              <ng-container *ngIf="additionalUserDataInLeaderboard == 'top'">
+                <div class="card my-2 active-user-leaderboard-card-data">
+                  <div class="card-body py-2 pb-3">
+                    <div class="d-flex justify-content-between">
+                      <div>
+                        <small class="d-block opacity-50 mb-1 text-shamrock">Ghost</small>
+                        <div class="d-inline-block me-2">
+                          <ng-container *ngIf="user?.avatar && user?.avatarBackgroundColor; else DisplayDefaultAvatar">
+                            <app-avatar-preview [backgroundHexColor]="user!.avatarBackgroundColor" [avatar]="user!.avatar" size="xs"></app-avatar-preview>
+                          </ng-container>
+                          <ng-template #DisplayDefaultAvatar>
+                            <app-avatar-preview size="xs"></app-avatar-preview>
+                          </ng-template>
+                        </div>
+                        <div class="d-inline-block text-shamrock">
+                          <ng-container *ngIf="user?.nickname; else DisplayUserAddress">
+                            {{user!.nickname}}
+                          </ng-container>
+                          <ng-template #DisplayUserAddress>
+                            {{user!.address | slice:0:6}}...{{user!.address | slice:36:42}}
+                          </ng-template>
+                        </div>
+                      </div>
+                      <div>
+                        <small class="d-block opacity-50 text-shamrock">Rank</small>
+                        <span class="fs-5 d-block mt-2 text-shamrock">
+                          {{userHarvester!.rank}}
+                        </span>
+                      </div>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                      <div class="text-start">
+                        <small class="d-block opacity-50 text-shamrock">First Deposit</small>
+                        <span class="fs-5 d-block text-shamrock">
+                          {{userHarvester!.createdAt | date:'shortDate'}}
+                        </span>
+                      </div>
+                      <div class="flex-grow-1 text-end">
+                        <small class="d-block opacity-50 text-shamrock">Harvested BOOFI</small>
+                        <span class="fs-5 d-block text-shamrock">
+                          {{userHarvester!.totalHarvestPoints | number:'1.0-2'}}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <hr class="hr-dashed-gray">
+              </ng-container>
+              <div class="card my-2 {{harvester.userAddress == userHarvester?.userAddress ? 'active-user-leaderboard-card-data' : 'bg-light-dark-transparency'}}"
+                   *ngFor="let harvester of harvesters | paginate:{itemsPerPage: 12, currentPage: currentHarvestersPage, totalItems: totalHarvesters}">
+                <div class="card-body py-2 pb-3">
+                  <div class="d-flex justify-content-between">
+                    <div>
+                      <small class="d-block opacity-50 mb-1 {{harvester.userAddress == userHarvester?.userAddress ? 'text-shamrock' : 'text-white'}}">Ghost</small>
+                      <div class="d-inline-block me-2">
+                        <ng-container *ngIf="harvester.user?.avatar && harvester.user?.avatarBackgroundColor; else DisplayDefaultAvatar">
+                          <app-avatar-preview [backgroundHexColor]="harvester.user!.avatarBackgroundColor" [avatar]="harvester.user!.avatar" size="xs"></app-avatar-preview>
+                        </ng-container>
+                        <ng-template #DisplayDefaultAvatar>
+                          <app-avatar-preview size="xs"></app-avatar-preview>
+                        </ng-template>
+                      </div>
+                      <div class="d-inline-block {{harvester.userAddress == userHarvester?.userAddress ? 'text-shamrock' : 'text-white'}}">
+                        <ng-container *ngIf="harvester.user?.nickname; else DisplayUserAddress">
+                          {{harvester.user!.nickname}}
+                        </ng-container>
+                        <ng-template #DisplayUserAddress>
+                          {{harvester.userAddress | slice:0:6}}...{{harvester.userAddress | slice:36:42}}
+                        </ng-template>
+                      </div>
+                    </div>
+                    <div>
+                      <small class="d-block opacity-50 {{harvester.userAddress == userHarvester?.userAddress ? 'text-shamrock' : 'text-white'}}">Rank</small>
+                      <span class="fs-5 d-block mt-2 {{harvester.userAddress == userHarvester?.userAddress ? 'text-shamrock' : 'text-white'}}">
+                        {{harvester.rank}}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-between mt-2">
+                    <div class="text-start">
+                      <small class="d-block opacity-50 {{harvester.userAddress == userHarvester?.userAddress ? 'text-shamrock' : 'text-white'}}">First Deposit</small>
+                      <span class="fs-5 d-block {{harvester.userAddress == userHarvester?.userAddress ? 'text-shamrock' : 'text-white'}}">
+                        {{harvester.createdAt | date:'shortDate'}}
+                      </span>
+                    </div>
+                    <div class="flex-grow-1 text-end">
+                      <small class="d-block opacity-50 {{harvester.userAddress == userHarvester?.userAddress ? 'text-shamrock' : 'text-white'}}">Harvested BOOFI</small>
+                      <span class="fs-5 d-block {{harvester.userAddress == userHarvester?.userAddress ? 'text-shamrock' : 'text-white'}}">
+                        {{harvester.totalHarvestPoints | number:'1.0-2'}}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <ng-container *ngIf="additionalUserDataInLeaderboard == 'bottom'">
+                <hr class="hr-dashed-gray">
+                <div class="card my-2 active-user-leaderboard-card-data">
+                  <div class="card-body py-2 pb-3">
+                    <div class="d-flex justify-content-between">
+                      <div>
+                        <small class="d-block opacity-50 mb-1 text-shamrock">Ghost</small>
+                        <div class="d-inline-block me-2">
+                          <ng-container *ngIf="user?.avatar && user?.avatarBackgroundColor; else DisplayDefaultAvatar">
+                            <app-avatar-preview [backgroundHexColor]="user!.avatarBackgroundColor" [avatar]="user!.avatar" size="xs"></app-avatar-preview>
+                          </ng-container>
+                          <ng-template #DisplayDefaultAvatar>
+                            <app-avatar-preview size="xs"></app-avatar-preview>
+                          </ng-template>
+                        </div>
+                        <div class="d-inline-block text-shamrock">
+                          <ng-container *ngIf="user?.nickname; else DisplayUserAddress">
+                            {{user!.nickname}}
+                          </ng-container>
+                          <ng-template #DisplayUserAddress>
+                            {{user!.address | slice:0:6}}...{{user!.address | slice:36:42}}
+                          </ng-template>
+                        </div>
+                      </div>
+                      <div>
+                        <small class="d-block opacity-50 text-shamrock">Rank</small>
+                        <span class="fs-5 d-block mt-2 text-shamrock">
+                          {{userHarvester!.rank}}
+                        </span>
+                      </div>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                      <div class="text-start">
+                        <small class="d-block opacity-50 text-shamrock">First Deposit</small>
+                        <span class="fs-5 d-block text-shamrock">
+                          {{userHarvester!.createdAt | date:'shortDate'}}
+                        </span>
+                      </div>
+                      <div class="flex-grow-1 text-end">
+                        <small class="d-block opacity-50 text-shamrock">Harvested BOOFI</small>
+                        <span class="fs-5 d-block text-shamrock">
+                          {{userHarvester!.totalHarvestPoints | number:'1.0-2'}}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </ng-container>
+            <ngx-skeleton-loader *ngIf="harvesters == null" [theme]="'standard' | skeleton:8.84" animation="progress" [count]="user ? 13 : 12"></ngx-skeleton-loader>
+          </div>
+          <div class="text-center mt-3">
+            <pagination-controls
+              [autoHide]="true"
+              [responsive]="true"
+              (pageChange)="changeHarvestersPage($event)"
+            ></pagination-controls>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-xl-5">
+    <div class="card-rounded bg-light-transparency-a-19">
+      <div class="card-body px-5 pt-md-4 pb-4 text-center">
+        <span class="h3 mt-0 mb-0 d-block">Well of Souls APR</span>
+        <div>
+          <span [@fadeInOnEnter] class="h1 d-block my-0" *ngIf="zBoofiStakingDetails != null">
+              {{zBoofiStakingDetails!.apr | percent:'1.0-2'}}
+          </span>
+          <div class="mt-1 w-100">
+            <ngx-skeleton-loader *ngIf="zBoofiStakingDetails == null" [theme]="'standard' | skeleton:2.77" animation="progress"></ngx-skeleton-loader>
+          </div>
+        </div>
+        <small class="mt-2 fs-6 fw-normal d-block opacity-50">
+          Last 7 days APR
+        </small>
+      </div>
+    </div>
+
+    <div class="card-rounded bg-light-transparency-a-19 mt-4">
+      <div class="card-body px-5 pt-md-4 pb-4">
+        <!--   User Profile -->
+        <div class="mb-3">
+          <div class="d-md-flex flex-wrap justify-content-between" *ngIf="user">
+            <div class="d-flex align-items-center justify-content-md-start justify-content-center">
+              <app-avatar-preview [avatar]="user.avatar" [backgroundHexColor]="user.avatarBackgroundColor"></app-avatar-preview>
+              <div class="ms-3">
+                <span class="h5 fw-bold">
+                  {{user.nickname ? user.nickname : 'Ghost'}}
+                </span>
+                <div>
+                <span class="text-decoration-underline mt-1 cursor-pointer" routerLink="/profile" [queryParams]="{redirectTo: 'well-of-souls'}">
+                  Edit Profile
+                </span>
+                </div>
+              </div>
+            </div>
+            <div class="mt-2 text-center text-md-end">
+              <span class="d-block mt-1 fs-6 opacity-50">
+                Your Rank
+              </span>
+              <ng-container *ngIf="userHarvester?.rank">
+                <span *ngIf="userHarvester?.rank != 'Unranked'; else Unranked" class="fs-1 fw-bold text-shamrock mt-3 d-block user-rank" (click)="onGotoUserRankPage()">
+                  #{{userHarvester?.rank}}
+                </span>
+                <ng-template #Unranked>
+                  <span class="fs-3 fw-bold opacity-50 text-white mt-3 d-block">
+                    Unranked
+                  </span>
+                </ng-template>
+              </ng-container>
+              <div class="mt-2 mt-md-0" *ngIf="userHarvester?.rank == null" style="min-width: 150px">
+                <ngx-skeleton-loader [@fadeInOnEnter] [theme]="'standard' | skeleton:2" [animation]="user ? 'progress' : 'false'"></ngx-skeleton-loader>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex align-items-center" *ngIf="user == null">
+            <ngx-skeleton-loader [@fadeInOnEnter] *ngIf="user == null" [theme]="'circle' | skeleton:96" appearance="circle" [animation]="user ? 'pulse' : 'false'"></ngx-skeleton-loader>
+            <div class="ms-3">
+              <span class="h5 fw-bold opacity-50">
+                Unknown Ghost
+              </span>
+              <div>
+                <span class="text-warning">
+                  Connect your wallet to see your stats
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row gy-3 gy-md-4">
+          <div class="order-first col-md-6 text-center text-md-start">
+            <span class="d-block mb-2 fs-6 opacity-50">
+              First deposit
+            </span>
+            <span [@fadeInOnEnter] *ngIf="userHarvester" class="fs-4 fw-bold m-0 d-block">
+              <ng-container *ngIf="userHarvester.createdAt; else NeverDeposited">
+                {{userHarvester.createdAt | date:'shortDate'}}
+              </ng-container>
+              <ng-template #NeverDeposited>
+                <span class="opacity-50">None</span>
+              </ng-template>
+            </span>
+            <div class="mt-2 mt-md-0" *ngIf="userHarvester == null" style="min-width: 150px">
+              <ngx-skeleton-loader [@fadeInOnEnter] [theme]="'standard' | skeleton:1.3" [animation]="user ? 'progress' : 'false'"></ngx-skeleton-loader>
+            </div>
+          </div>
+          <div class="order-1 col-md-6 text-center text-md-end">
+            <span class="d-block mb-2 fs-6 opacity-50">
+              zBOOFI Staked
+            </span>
+            <span [@fadeInOnEnter] *ngIf="userAmountDeposited" class="fs-4 fw-bold m-0 d-block">
+              {{userAmountDeposited!  | formatUnits}}
+            </span>
+            <div class="mt-2 mt-md-0" *ngIf="userAmountDeposited == null" style="min-width: 150px">
+              <ngx-skeleton-loader [@fadeInOnEnter] [theme]="'standard' | skeleton:1.3" [animation]="user ? 'progress' : 'false'"></ngx-skeleton-loader>
+            </div>
+          </div>
+          <div class="order-4 order-md-2 col-md-6 text-center text-md-start">
+            <span class="d-block mb-2 fs-6 opacity-50">
+              BOOFI Harvested
+            </span>
+            <span [@fadeInOnEnter] *ngIf="userHarvester?.totalHarvested" class="fs-4 fw-bold m-0 d-block">
+              {{userHarvester!.totalHarvested!  | formatUnits}}
+            </span>
+            <div class="mt-2 mt-md-0" *ngIf="userHarvester?.totalHarvested == null" style="min-width: 150px">
+              <ngx-skeleton-loader [@fadeInOnEnter] [theme]="'standard' | skeleton:1.3" [animation]="user ? 'progress' : 'false'"></ngx-skeleton-loader>
+            </div>
+          </div>
+          <div class="order-3 col-md-6 text-center text-md-end">
+            <span class="d-block mb-2 fs-6 opacity-50">
+              zBOOFI Balance
+            </span>
+            <span [@fadeInOnEnter] *ngIf="userZboofiBalance" class="fs-4 fw-bold m-0 d-block">
+              {{userZboofiBalance | formatUnits}}
+            </span>
+            <div class="mt-2 mt-md-0" *ngIf="userZboofiBalance == null" style="min-width: 150px">
+              <ngx-skeleton-loader [@fadeInOnEnter] [theme]="'standard' | skeleton:1.3" [animation]="user ? 'progress' : 'false'"></ngx-skeleton-loader>
+            </div>
+          </div>
+          <div class="col-md-6 order-5 text-center text-md-start">
+            <span class="d-block fs-6 mb-2 opacity-50">
+              BOOFI Pending
+            </span>
+            <div [@fadeInOnEnter] *ngIf="userPendingRewards">
+              <span class="d-block fs-4 fw-bold m-0">
+                {{userPendingRewards! | formatUnits}}
+              </span>
+            </div>
+            <div class="mt-2 mt-md-0" *ngIf="userPendingRewards == null" style="min-width: 150px">
+              <ngx-skeleton-loader [@fadeInOnEnter] [theme]="'standard' | skeleton:1.3" [animation]="user ? 'progress' : 'false'"></ngx-skeleton-loader>
+            </div>
+          </div>
+          <div class="col-md-6 order-last text-center text-md-end align-self-end">
+            <button nbButton size="large" status="success" shape="round" fullWidth (click)="harvest()"
+                    [disabled]="loadingHarvestTransaction || userPendingRewards == null || userPendingRewards?.isZero() == true"
+                    nbSpinnerMessage="Confirming"
+                    [nbSpinner]="loadingHarvestTransaction">
+                <span [ngStyle]="{'opacity': loadingHarvestTransaction ? 0 : 1}">
+                  Harvest
+                </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-rounded bg-light-transparency-a-19 mt-4">
+      <div class="card-header stake-active"
+           [ngClass]="{'unstake-active': stakingMode == StakingModeEnum.Withdraw}">
+        <div class="card-rounded-tabs d-flex justify-content-between">
+          <div class="flex-even first-tab"
+               (click)="stakingMode = StakingModeEnum.Deposit"
+               [ngClass]="{'inactive': stakingMode == StakingModeEnum.Withdraw}">
+            <span class="fw-bold fs-3 ms-md-3 no-select">
+              Stake
+            </span>
+          </div>
+          <div class="flex-even last-tab"
+               (click)="stakingMode = StakingModeEnum.Withdraw"
+               [ngClass]="{'inactive': stakingMode == StakingModeEnum.Deposit}">
+            <span class="fw-bold fs-3 ms-md-3 no-select">
+              Unstake
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="card-body px-4 pt-1 pb-4">
+        <ng-container [ngSwitch]="stakingMode">
+          <ng-container *ngSwitchCase="StakingModeEnum.Deposit">
+            <ng-container *ngIf="loadingZboofiAllowance == false; else LoadingAllowances">
+              <div *ngIf="user == null || userZboofiAllowance?.gte(minimumAllowanceToRequestApproval); else ApproveAllowance" [@fadeInOnEnter] class="row gy-2 mt-3">
+                <div class="col-md-7">
+                  <label for="stake" class="visually-hidden-focusable">
+                    Stake
+                  </label>
+                  <nb-form-field>
+                    <input nbInput shape="semi-round" fieldSize="large" fullWidth status="basic" [formControl]="depositAmountControl" id="stake" type="text" placeholder="0.0 zBOOFI">
+                    <button nbSuffix size="small" nbButton shape="semi-round" class="me-2 btn-ghost" (click)="maxUserStakeBalance()" [disabled]="!user || loadingDepositTransaction">
+                      MAX
+                    </button>
+                  </nb-form-field>
+                </div>
+                <div class="col-md-5">
+                  <button nbButton status="success" shape="round" size="large" fullWidth
+                          [nbSpinner]="loadingDepositTransaction" nbSpinnerMessage="Confirming"
+                          (click)="deposit()"
+                          [disabled]="user == null || depositAmountControl.invalid || loadingDepositTransaction">
+                    <span [ngStyle]="{'opacity': loadingDepositTransaction ? 0 : 1}">
+                      Stake
+                    </span>
+                  </button>
+                </div>
+              </div>
+              <div class="mt-2" *ngIf="depositAmountControl.value && depositAmountControl.invalid && (depositAmountControl.dirty || depositAmountControl.touched)">
+                  <span class="text-danger d-block" *ngIf="depositAmountControl.errors?.invalidValue">
+                    The provided amount is invalid
+                  </span>
+                  <span class="text-danger d-block" *ngIf="depositAmountControl.errors?.cannotBeZero">
+                    The amount must be higher than 0
+                  </span>
+                  <span class="text-danger d-block" *ngIf="depositAmountControl.errors?.exceedsBalance">
+                    This amount exceeds your zBOOFI balance
+                  </span>
+              </div>
+              <ng-template #ApproveAllowance>
+                <div class="mt-4">
+                  <button nbButton status="success" shape="round"
+                          size="large"
+                          *ngIf="!failedLoadingZboofiAllowance"
+                          fullWidth (click)="approveZboofiAllowance()"
+                          [disabled]="loadingApproveAllowanceTransaction"
+                          nbSpinnerMessage="Waiting Confirmation"
+                          [nbSpinner]="loadingApproveAllowanceTransaction">
+                    <span [ngStyle]="{'opacity': loadingApproveAllowanceTransaction ? 0 : 1}">
+                      Approve
+                    </span>
+                  </button>
+                  <div *ngIf="failedLoadingZboofiAllowance">
+                    <button nbButton size="large" status="success" shape="round" fullWidth (click)="getUserZboofiAllowance()">
+                      Reload Allowance
+                    </button>
+                    <div class="text-center">
+                      <small class="text-danger">We were unable to verify your zBOOFI allowance</small>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </ng-container>
+            <ng-template #LoadingAllowances>
+              <div class="mt-4">
+                <button nbButton status="primary" shape="round" size="large" fullWidth
+                        [nbSpinner]="loadingZboofiAllowance" nbSpinnerMessage="Loading Allowances"
+                        [disabled]="loadingZboofiAllowance">
+                  <span style="opacity: 0">Approve</span>
+                </button>
+              </div>
+            </ng-template>
+          </ng-container>
+          <ng-container *ngSwitchCase="StakingModeEnum.Withdraw">
+            <div [@fadeInOnEnter] class="row gy-2 mt-3">
+              <div class="col-md-7">
+                <label for="unstake" class="visually-hidden-focusable">
+                  Unstake
+                </label>
+                <nb-form-field>
+                  <input nbInput shape="semi-round" fieldSize="large" fullWidth status="basic" [formControl]="withdrawAmountControl" id="unstake" type="text" placeholder="0.0 zBOOFI">
+                  <button nbSuffix size="small" nbButton shape="semi-round" class="me-2 btn-ghost" (click)="maxUserUnstakeBalance()" [disabled]="!user || loadingWithdrawTransaction">
+                    MAX
+                  </button>
+                </nb-form-field>
+              </div>
+              <div class="col-md-5">
+                <button nbButton status="success" shape="round" size="large" fullWidth (click)="withdraw()"
+                        [nbSpinner]="loadingWithdrawTransaction" nbSpinnerMessage="Confirming"
+                        [disabled]="user == null || withdrawAmountControl.invalid || loadingWithdrawTransaction">
+                  <span [ngStyle]="{'opacity': loadingWithdrawTransaction ? 0 : 1}">
+                    Unstake
+                  </span>
+                </button>
+              </div>
+            </div>
+            <div class="mt-2" *ngIf="withdrawAmountControl.value && withdrawAmountControl.invalid && (withdrawAmountControl.dirty || withdrawAmountControl.touched)">
+              <span class="text-danger" *ngIf="withdrawAmountControl.errors?.invalidValue">
+                The provided amount is invalid
+              </span>
+              <span class="text-danger" *ngIf="withdrawAmountControl.errors?.cannotBeZero">
+                The amount must be higher than 0
+              </span>
+              <span class="text-danger d-block" *ngIf="withdrawAmountControl.errors?.exceedsBalance">
+                This amount exceeds your zBOOFI stake
+              </span>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+</div>

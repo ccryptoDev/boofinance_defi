@@ -1,0 +1,32 @@
+.countdown-timer-label {
+  font-weight: 500;
+  line-height: 19px;
+  text-align: center;
+  letter-spacing: -1px;
+  text-transform: uppercase !important;
+}
+
+.bg-event-vortex, .bg-avax-event, .bg-usdce-event, .bg-boofi-avax-event, .bg-ptp-avax-event {
+  background-size: cover;
+  background-position: center;
+}
+
+.bg-event-vortex {
+  background-image: url('../../../../assets/images/layout/events/banner-event.jpg') !important;
+}
+
+.bg-avax-event {
+  background-image: url('../../../../assets/images/layout/events/banner-avax.jpg') !important;
+}
+
+.bg-usdce-event {
+  background-image: url('../../../../assets/images/layout/events/banner-usdce.jpg') !important;
+}
+
+.bg-boofi-avax-event {
+  background-image: url('../../../../assets/images/layout/events/banner-boofi-avax.jpg') !important;
+}
+
+.bg-ptp-avax-event {
+  background-image: url('../../../../assets/images/layout/events/banner-ptp-avax.jpg') !important;
+}

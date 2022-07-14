@@ -1,0 +1,46 @@
+<ng-container *ngIf="token">
+  <div class="nft-container text-center">
+    <div class="nft-img">
+      <img [src]="token.nftImg" [alt]="token.name">
+    </div>
+    <div class="name">
+      <h6 class="">{{token.name}}</h6>
+    </div>
+    <ng-container *ngIf="userNft; else NewNft">
+      <div class="attr-wrapper">
+        <div class="nft-attribute">
+          <div class="attr-icon">
+            <img src="./assets/images/battle/muscle.png" alt="muscle">
+          </div>
+          <div class="attr-value">
+            <p>{{token.muscle}}</p>
+          </div>
+        </div>
+        <div class="nft-attribute">
+          <div class="attr-icon">
+            <img src="./assets/images/battle/brain.png" alt="brain">
+          </div>
+          <div class="attr-value">
+            <p>{{token.brain}}</p>
+          </div>
+        </div>
+        <div class="nft-attribute">
+          <div class="attr-icon">
+            <img src="./assets/images/battle/speed.png" alt="speed">
+          </div>
+          <div class="attr-value">
+            <p>{{token.speed}}</p>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #NewNft>
+      <div class="buy-btn">
+        <button (click)="buyToken(token.tokenId)">
+          Buy
+        </button>
+      </div>
+    </ng-template>
+    
+  </div>
+</ng-container>

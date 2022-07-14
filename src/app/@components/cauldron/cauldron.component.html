@@ -1,0 +1,640 @@
+<app-card-information-toggle
+ [displayHelp]="userConfiguration?.helpToggles?.howToUseCauldron"
+ (onHelpToggled)="onHelpToggled()"
+ bodyClasses="bg-light-transparency-gradient border-light-transparent py-4"
+ bodyTitle="The Cauldron"
+ bodyImageUrl="../../../assets/images/cauldron/animated-cauldron.gif"
+ bodyDescription="A unique yield accelerator that distributes zBOOFI. Manage all of your liquidity in one place with market leading APRs and yield bearing strategies."
+ toggleHelpTitle="How to Use The Cauldron"
+ learnMoreUrl="https://boofinance.gitbook.io/boo-finance/dapps/the-cauldron"
+ (onCustomAction)="openCauldronCompositionDialog()"
+ customActionIcon="pie-chart-outline"
+ customActionTitle="View Cauldron composition"
+>
+  <div class="row vertical-grid-gray-lg mt-5">
+    <div class="col-lg-4 px-lg-4">
+        <span class="h5 text-shamrock fw-normal mb-2">
+          Select a Token
+        </span>
+      <ul class="list-unstyled">
+        <li class="lh-27">
+          a.  Click on “Your Tokens” to choose a Cauldron compatible LP or Single Token from your wallet.
+        </li>
+        <li class="lh-27">
+          b.  If you do not have any or if you want to view all Cauldron compatible tokens, click “LP Tokens” or “Single Tokens” to view.
+        </li>
+      </ul>
+      <hr class="hr-dashed-gray d-block d-lg-none my-3">
+    </div>
+    <div class="col-lg-4 px-lg-4">
+        <span class="h5 text-shamrock fw-normal">
+          Contribute
+        </span>
+      <ul class="list-unstyled">
+        <li class="lh-27">
+          a.  If you do not have tokens, click “GET TOKENS” to get tokens.
+        </li>
+        <li class="lh-27">
+          b.  Click “CONTRIBUTE” to activate the Cauldron contract.
+          Note: If this is your first time interacting with this particular token in the Cauldron, you must first click “APPROVE” to approve the contract.
+        </li>
+        <li class="lh-27">
+          c.  Enter the number of tokens you would like to contribute to the Cauldron and click “CONTRIBUTE”.
+        </li>
+      </ul>
+      <hr class="hr-dashed-gray d-block d-lg-none my-3">
+    </div>
+    <div class="col-lg-4 px-lg-4">
+        <span class="h5 text-shamrock fw-normal mb-2">
+          View Cauldron
+        </span>
+      <p class="lh-27">
+        Click “View composition”
+      </p>
+      <span class="h5 text-shamrock fw-normal mb-2">
+        Harvest your rewards
+      </span>
+      <p class="lh-27">
+        Click “HARVEST” to harvest your zBOOFI rewards.
+      </p>
+    </div>
+  </div>
+</app-card-information-toggle>
+
+<div class="div mx-md-3 mb-4 mt-5">
+  <div class="row gx-lg-5 vertical-grid-shamrock-lg">
+    <div class="col-lg-6">
+      <h2 class="h3 text-shamrock">
+        1. Select a token
+      </h2>
+      <div class="d-flex flex-wrap justify-content-start mt-4">
+        <div class="me-2 me-md-3 me-lg-4 mb-2">
+          <span class="text-white opacity-50 text-nowrap">
+            Filter by:
+          </span>
+        </div>
+        <div class="d-flex mb-2">
+          <div class="me-1 me-md-2 me-lg-3">
+            <span class="{{cauldronTokenSelectionMenu == CauldronTokenSelectionMenuEnum.UserTokens ? 'fw-bold text-white' : 'opacity-50 cursor-pointer text-nowrap'}} no-select"
+              (click)="setTokenSelectionTab(CauldronTokenSelectionMenuEnum.UserTokens)">
+              Your Tokens
+            </span>
+          </div>
+          <span class="me-1 me-md-2 me-lg-3 opacity-50">
+            &verbar;
+          </span>
+          <div class="me-1 me-md-2 me-lg-3">
+            <span class="{{cauldronTokenSelectionMenu == CauldronTokenSelectionMenuEnum.LiquidityPoolTokens ? 'fw-bold text-white' : 'opacity-50 cursor-pointer text-nowrap'}} no-select"
+                  (click)="setTokenSelectionTab(CauldronTokenSelectionMenuEnum.LiquidityPoolTokens)">
+              LP Tokens
+            </span>
+          </div>
+          <!-- remove filter option for single token -->
+          <!-- <span class="me-1 me-md-2 me-lg-3 opacity-50">
+            &verbar;
+          </span>
+          <div>
+            <span class="{{cauldronTokenSelectionMenu == CauldronTokenSelectionMenuEnum.SingleToken ? 'fw-bold text-white' : 'opacity-50 cursor-pointer text-nowrap'}} no-select"
+                  (click)="setTokenSelectionTab(CauldronTokenSelectionMenuEnum.SingleToken)">
+              Single Token
+            </span>
+          </div> -->
+        </div>
+      </div>
+      <div class="row mt-2 mb-4">
+        <div class="col-lg-8">
+          <nb-form-field>
+            <input type="text" nbInput shape="semi-round" fullWidth placeholder="Search by name, symbol" [formControl]="tokenSearchControl">
+            <button nbButton nbSuffix ghost class="input-group-text unselectable">
+              <nb-icon icon="search-outline"></nb-icon>
+            </button>
+          </nb-form-field>
+        </div>
+        <div class="col-lg-4" *ngIf="loadingCauldronComposition" [nbSpinner]="loadingCauldronComposition" nbSpinnerStatus="success" nbSpinnerMessage="Loading Sorts"></div>
+        <div class="col-lg-4" *ngIf="!loadingCauldronComposition">
+          <span class="d-inline-block text-white opacity-50 mx-md-2">
+            Sort by:
+          </span>
+          <span class="d-inline-block text-white m-2 cursor-pointer" [nbContextMenu]="tokenSortByMenuOptions">
+            <ng-container [ngSwitch]="selectedSortBy">
+              <span *ngSwitchCase="TokenSortingMenuEnum.DEFAULT">
+                Default
+              </span>
+              <span *ngSwitchCase="TokenSortingMenuEnum.HOT">
+                Hot
+              </span>
+              <span *ngSwitchCase="TokenSortingMenuEnum.NEW">
+                New
+              </span>
+              <span *ngSwitchCase="TokenSortingMenuEnum.APR">
+                APR
+              </span>
+              <span *ngSwitchCase="TokenSortingMenuEnum.Liquidity">
+                Liquidity
+              </span>
+            </ng-container>
+            <span>
+              <nb-icon icon="arrow-down-outline"></nb-icon>
+            </span>
+          </span>
+        </div>
+      </div>
+
+      <ng-container [ngSwitch]="cauldronTokenSelectionMenu">
+        <ng-container *ngSwitchCase="CauldronTokenSelectionMenuEnum.UserTokens">
+            <div [nbSpinner]="loadingUserTokens" nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading your tokens..." class="row gy-4" [ngClass]="{'py-5': loadingUserTokens}">
+              <ng-container *ngIf="user; else UserDisconnected">
+                <ng-container *ngIf="userTokens && userTokens?.size! > 0; else UserHasNoTokens">
+                  <div class="col-4 col-sm-3 col-xxl-2 text-center" *ngFor="let userToken of userTokens | filterTokens:'any':searchByNameOrSymbolTokenFilter| keyvalue | sortTokens:selectedSortBy:cauldronComposition | paginate:paginationConfig('userTokens', userTokensCurrentPage)">
+                    <div [@fadeInOnEnter]>
+                      <app-token-preview class="cursor-pointer" [token]="userToken.value"
+                                         [displayStakedDecorator]="userHasTokenStaked?.get(userToken.value.address)"
+                                         [selected]="selectedToken?.address?.toLowerCase() == userToken.value.address.toLowerCase()"
+                                         (click)="tokenSelected(userToken.value)">
+                      </app-token-preview>
+                    </div>
+                  </div>
+                  <div class="text-center mt-5">
+                    <pagination-controls
+                      id="userTokens"
+                      [autoHide]="true"
+                      [responsive]="true"
+                      (pageChange)="userTokensCurrentPage = $event"
+                    ></pagination-controls>
+                  </div>
+                </ng-container>
+                <ng-template #UserHasNoTokens>
+                  <div *ngIf="!loadingUserTokens" class="opacity-50 text-center py-4 fs-5">
+                    You don't have any token available yet
+                  </div>
+                </ng-template>
+              </ng-container>
+              <ng-template #UserDisconnected>
+                <div class="opacity-50 text-center py-4 fs-5">
+                  Connect your wallet to see your tokens
+                </div>
+              </ng-template>
+            </div>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="CauldronTokenSelectionMenuEnum.LiquidityPoolTokens">
+          <div [@fadeInOnEnter]>
+            <div class="row gy-4">
+              <ng-container *ngFor="let token of tokens | filterTokens:'liquidity-pair-token':searchByNameOrSymbolTokenFilter | keyvalue | sortTokens:selectedSortBy:cauldronComposition | paginate:paginationConfig('liquidity', liquidityTokensCurrentPage)">
+                <div class="col-4 col-sm-3 col-xxl-2 text-center">
+                  <app-token-preview class="cursor-pointer" [token]="token.value"
+                                     [displayStakedDecorator]="userHasTokenStaked?.get(token.value.address)"
+                                     [selected]="selectedToken?.address == token.value.address"
+                                     (click)="tokenSelected(token.value)">
+                  </app-token-preview>
+                </div>
+              </ng-container>
+            </div>
+            <div class="text-center mt-5">
+              <pagination-controls
+                id="liquidity"
+                [autoHide]="true"
+                [responsive]="true"
+                (pageChange)="liquidityTokensCurrentPage = $event"
+              ></pagination-controls>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- ingore single tokens for now -->
+        <!-- <ng-container *ngSwitchCase="CauldronTokenSelectionMenuEnum.SingleToken">
+          <div [@fadeInOnEnter]>
+            <div class="row gy-4">
+              <ng-container *ngFor="let token of tokens | filterTokens:'single-token':searchByNameOrSymbolTokenFilter | keyvalue | sortTokens:selectedSortBy:cauldronComposition | paginate: paginationConfig('single' ,singleTokensCurrentPage)">
+                <div [@fadeInOnEnter] class="col-4 col-sm-3 col-xxl-2 text-center">
+                  <app-token-preview class="cursor-pointer"
+                                     [token]="token.value"
+                                     [displayStakedDecorator]="userHasTokenStaked?.get(token.value.address)"
+                                     [selected]="selectedToken?.address == token.value.address"
+                                     (click)="tokenSelected(token.value)">
+                  </app-token-preview>
+                </div>
+              </ng-container>
+            </div>
+            <div class="text-center mt-5">
+              <pagination-controls
+                id="single"
+                [autoHide]="true"
+                [responsive]="true"
+                (pageChange)="singleTokensCurrentPage = $event"
+              ></pagination-controls>
+            </div>
+          </div>
+        </ng-container> -->
+      </ng-container>
+
+    </div>
+    <div id="contribute_block" class="col-lg-6">
+      <hr class="d-block hr-dashed-shamrock d-lg-none my-4">
+      <h3 class="text-shamrock">
+        2. Contribute to the Cauldron
+      </h3>
+      <div class="mt-4 position-relative">
+        <div class="my-3 mb-4">
+          <div [@fadeInOnEnter] *ngIf="selectedToken; else NoTokenSelected" class="d-flex align-items-center">
+            <div>
+              <app-token-preview [token]="selectedToken" [displayTokenSymbolOrLPSource]="false"></app-token-preview>
+            </div>
+            <div>
+              <div class="d-inline-block mt-2">
+                <span class="d-block ms-3 me-4 fs-2 fw-bold">
+                  {{selectedToken.symbol}}
+                </span>
+                <small class="d-block ms-3 fw-bold">
+                  {{selectedToken.name}}
+                </small>
+              </div>
+            </div>
+            <div class="d-none d-lg-block flex-grow-1">
+              <div class="d-inline-block ms-4">
+                <a (click)="openGetTokensUrl()" target="_blank" class="text-decoration-underline text-success fs-6">
+                  <span class="lead fw-bold text-shamrock cursor-pointer">
+                    > Get Tokens
+                  </span>
+                </a>
+              </div>
+            </div>
+            <div class="ms-auto">
+              <nb-icon *ngIf="cauldronContributionMenu" (click)="unselectToken()" pack="boofi" icon="x" class="fw-bold icon-sm cursor-pointer"></nb-icon>
+            </div>
+          </div>
+          <ng-template #NoTokenSelected>
+            <div [@fadeInOnEnter] class="d-flex align-items-center">
+              <div>
+                <img class="img-fluid d-inline-block me-2" src="./assets/images/cauldron/no-token.svg" alt="No token" width="48">
+              </div>
+              <div>
+                <span class="fs-2 fw-bold">
+                  ---
+                </span>
+              </div>
+            </div>
+          </ng-template>
+          <div class="d-block d-lg-none mx-2 mt-3">
+            <span (click)="openGetTokensUrl()" class="lead fw-bold fs-6" [ngClass]="{'text-shamrock text-decoration-underline cursor-pointer': selectedToken, 'text-white opacity-50': !selectedToken}">
+              > Get Tokens
+            </span>
+          </div>
+        </div>
+
+        <div class="row mb-2 gy-3 mx-2">
+          <div class="col-md-4">
+            <span class="fs-6 mb-2 d-block opacity-50">Liquidity</span>
+            <ng-container *ngIf="selectedToken">
+              <span [@fadeInOnEnter] *ngIf="selectedTokenCauldronDetails?.liquidityInUsd != null" class="fs-6 fw-bold text-break">
+                {{selectedTokenCauldronDetails!.liquidityInUsd | currency:'USD':'symbol':'1.0-0'}}
+              </span>
+              <ngx-skeleton-loader *ngIf="selectedTokenCauldronDetails?.liquidityInUsd == null" [theme]="'standard' | skeleton:1.32" animation="progress"></ngx-skeleton-loader>
+            </ng-container>
+            <span [@fadeInOnEnter] class="fs-6 fw-bold" *ngIf="selectedToken == null">
+              ---
+            </span>
+          </div>
+          <div class="col-md-4">
+            <span class="fs-6 mb-2 d-block opacity-50">Volume</span>
+            <ng-container *ngIf="selectedToken">
+                <span [@fadeInOnEnter] *ngIf="selectedTokenCauldronDetails?.volumeInUsd != null" class="fs-6 fw-bold text-break">
+                  {{selectedTokenCauldronDetails!.volumeInUsd | currency:'USD':'symbol':'1.0-0'}}
+                </span>
+                <ngx-skeleton-loader *ngIf="selectedTokenCauldronDetails?.volumeInUsd == null" [theme]="'standard' | skeleton:1.32" animation="progress"></ngx-skeleton-loader>
+            </ng-container>
+            <span [@fadeInOnEnter] class="fs-6 fw-bold" *ngIf="selectedToken == null">
+              ---
+            </span>
+          </div>
+          <div class="col-md-4">
+            <div class="mb-2">
+              <span class="fs-6 mb-2 text-break no-select {{averagePercentageMenu == AveragePercentageMenuEnum.APR ? 'text-white fw-bold' : 'opacity-50 cursor-pointer'}}" (click)="averagePercentageMenu = AveragePercentageMenuEnum.APR">
+                APR
+              </span>
+              <span class="opacity-50 mx-2">/</span>
+              <span class="fs-6 mb-2 text-break no-select {{averagePercentageMenu == AveragePercentageMenuEnum.APY ? 'text-white fw-bold' : 'opacity-50 cursor-pointer'}}" (click)="averagePercentageMenu = AveragePercentageMenuEnum.APY">
+                APY
+              </span>
+              <div class="d-inline-block ms-2">
+                <nb-icon [satPopoverAnchor]="CompositeInterestTooltip" (click)="CompositeInterestTooltip.toggle()" icon="alert-circle-outline" class="opacity-50 cursor-pointer"></nb-icon>
+              </div>
+            </div>
+            <sat-popover #CompositeInterestTooltip [hasBackdrop]="true">
+              <div class="boofi-tooltip">
+                <div class="d-flex justify-content-between">
+                  <div class="text-white me-3">
+                    <div class="d-inline-block me-2">
+                      <nb-icon icon="alert-circle-outline"></nb-icon>
+                    </div>
+                    <h6 class="d-inline-block text-start text-nowrap text-white mx-0 py-0">
+                      Composite APR
+                    </h6>
+                  </div>
+                  <div class="text-white cursor-pointer" (click)="CompositeInterestTooltip.close()">
+                    <nb-icon icon="close-outline"></nb-icon>
+                  </div>
+                </div>
+                <ul class="mt-2 text-start list-unstyled">
+                  <li>
+                      <span class="text-decoration-underline">
+                        Emissions APR
+                      </span>
+                    : {{selectedTokenCompositeInterestRate ? ((selectedTokenCompositeInterestRate?.tokenApr | percent) + ' - APR'): ''}} from zBOOFI rewards.
+                  </li>
+                  <li class="mt-2">
+                      <span class="text-decoration-underline">
+                        Growth APR
+                      </span>
+                    : {{selectedTokenCompositeInterestRate ? ((selectedTokenCompositeInterestRate?.stakeApr | percent) + ' - APR'): ''}} from growth of zBOOFI.
+                  </li>
+                  <li class="mt-2">
+                      <span class="text-decoration-underline">
+                        Composite APR
+                      </span>
+                    : {{selectedTokenCompositeInterestRate ? ((selectedTokenCompositeInterestRate?.compositeApr | percent) + ' - APR'): ''}} from zBOOFI rewards growing at the Growth APR.
+                  </li>
+                </ul>
+              </div>
+            </sat-popover>
+            <div>
+              <ng-container *ngIf="selectedToken">
+                <ng-container *ngIf="averagePercentageMenu == AveragePercentageMenuEnum.APR">
+                    <span [@fadeInOnEnter] *ngIf="selectedTokenCompositeInterestRate?.compositeApr != null" class="fs-6 fw-bold">
+                      {{selectedTokenCompositeInterestRate!.compositeApr | percent:'1.0-6'}}
+                    </span>
+                    <ngx-skeleton-loader *ngIf="selectedTokenCauldronDetails?.apr == null" [theme]="'standard' | skeleton:1.32" animation="progress"></ngx-skeleton-loader>
+                </ng-container>
+                <ng-container *ngIf="averagePercentageMenu == AveragePercentageMenuEnum.APY">
+                  <ng-container *ngIf="selectedTokenCompositeInterestRate?.compositeApy != null">
+                     <span [@fadeInOnEnter] *ngIf="selectedTokenCompositeInterestRate!.compositeApy != Number.POSITIVE_INFINITY; else InfiniteApy" class="fs-6 fw-bold">
+                        {{selectedTokenCompositeInterestRate!.compositeApy | percent:'1.0-6'}}
+                     </span>
+                     <ng-template #InfiniteApy>
+                       <nb-icon pack="boofi" icon="infinity" class="icon-xs"></nb-icon>
+                     </ng-template>
+                  </ng-container>
+                  <ngx-skeleton-loader *ngIf="selectedTokenCauldronDetails?.apy == null" [theme]="'standard' | skeleton:1.32" animation="progress"></ngx-skeleton-loader>
+                </ng-container>
+              </ng-container>
+              <span [@fadeInOnEnter] class="fs-6 fw-bold" *ngIf="selectedToken == null">
+                ---
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="position-relative card-rounded bg-light-transparency-a-19 mt-4 py-md-2">
+          <div class="card-body px-4 py-4">
+            <div class="mb-2 d-flex">
+              <div class="mx-2">
+                <span class="{{cauldronHarvestSelectionMenu == CauldronHarvestSelectionMenuEnum.All ? 'fw-bold text-white' : 'opacity-50 cursor-pointer text-nowrap'}} no-select" (click)="setHarvestTab(CauldronHarvestSelectionMenuEnum.All)">
+                  All
+                </span>
+              </div>
+              <span class="mx-2 opacity-50 no-select">
+                &verbar;
+              </span>
+              <div class="mx-2">
+                <span class="{{cauldronHarvestSelectionMenu == CauldronHarvestSelectionMenuEnum.ThisToken ? 'fw-bold text-white' : 'opacity-50 cursor-pointer text-nowrap'}} no-select" (click)="setHarvestTab(CauldronHarvestSelectionMenuEnum.ThisToken)">
+                  This token
+                </span>
+              </div>
+            </div>
+            <div class="row mb-1 gy-3 gx-2 align-items-center">
+              <div class="col-3 col-md-3">
+                <div class="p-sm-1">
+                  <img src="../../../assets/images/general/boofi-golden-zombie.gif" alt="ZBoofi" class="img-fluid">
+                </div>
+              </div>
+              <div class="col-9 col-md-5">
+                <span class="fs-6 mb-2 d-block opacity-50">Your rewards</span>
+                <ng-container *ngIf="cauldronHarvestSelectionMenu == CauldronHarvestSelectionMenuEnum.ThisToken">
+                  <ng-container *ngIf="selectedToken != null">
+                    <span [@fadeInOnEnter] *ngIf="user && selectedTokenUserInfo?.pendingRewards" class="fs-6 fw-bold">
+                      {{selectedTokenUserInfo!.pendingRewards! | formatUnits:'medium':18}} zBOOFI
+                    </span>
+                    <ngx-skeleton-loader class="me-md-4" [@fadeInOnEnter] *ngIf="user == null || selectedTokenUserInfo?.pendingRewards == null" [theme]="'standard' | skeleton:1.32" [animation]="user ? 'progress' : 'false'"></ngx-skeleton-loader>
+                  </ng-container>
+                  <span [@fadeInOnEnter] class="fs-6 fw-bold" *ngIf="selectedToken == null">
+                    ---
+                  </span>
+                </ng-container>
+                <ng-container *ngIf="cauldronHarvestSelectionMenu == CauldronHarvestSelectionMenuEnum.All">
+                  <span [@fadeInOnEnter] *ngIf="user && userOverallZboofiRewards?.totalZBoofiRewards" class="fs-6 fw-bold">
+                    {{userOverallZboofiRewards!.totalZBoofiRewards | formatUnits:'medium':18}} zBOOFI
+                  </span>
+                  <ngx-skeleton-loader class="me-md-4" [@fadeInOnEnter] *ngIf="user == null || userOverallZboofiRewards?.totalZBoofiRewards == null" [theme]="'standard' | skeleton:1.32" [animation]="user ? 'progress' : 'false'"></ngx-skeleton-loader>
+                </ng-container>
+              </div>
+              <div *ngIf="cauldronHarvestSelectionMenu == CauldronHarvestSelectionMenuEnum.ThisToken" class="col-12 col-md-4">
+                <button nbButton status="success" shape="round" size="large" fullWidth (click)="harvestSelectedToken()" nbSpinnerMessage="Confirming"
+                        [nbSpinner]="loadingHarvestTransaction || loadingBatchHarvestTransaction" [disabled]="selectedToken == null || user == null || selectedTokenUserInfo == null || selectedTokenUserInfo?.pendingRewards?.isZero() == true || loadingHarvestTransaction || loadingBatchHarvestTransaction">
+                  <span [ngStyle]="{'opacity': loadingHarvestTransaction || loadingBatchHarvestTransaction ? 0 : 1}">Harvest</span>
+                </button>
+              </div>
+              <div *ngIf="cauldronHarvestSelectionMenu == CauldronHarvestSelectionMenuEnum.All" class="col-12 col-md-4">
+                <button nbButton status="success" shape="round" size="large" fullWidth (click)="harvestAll()" nbSpinnerMessage="Confirming"
+                        [nbSpinner]="loadingBatchHarvestTransaction" [disabled]="user == null || userStakedTokenAddresses == null || userOverallZboofiRewards == null || userOverallZboofiRewards?.totalZBoofiRewards?.isZero() == true || loadingBatchHarvestTransaction">
+                  <span [ngStyle]="{'opacity': loadingBatchHarvestTransaction ? 0 : 1}">Harvest All</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-4" [ngSwitch]="cauldronContributionMenu">
+          <div class="card-rounded bg-light-transparency-a-19 mt-4">
+            <div class="card-header stake-active" [ngClass]="{'unstake-active': cauldronContributionMenu == CauldronContributionMenuEnum.Withdraw}">
+              <div class="card-rounded-tabs d-flex justify-content-between">
+                <div class="flex-even first-tab"
+                     (click)="cauldronContributionMenu = CauldronContributionMenuEnum.Contribute"
+                     [ngClass]="{'inactive': cauldronContributionMenu == CauldronContributionMenuEnum.Withdraw}">
+                        <span class="fw-bold fs-3 ms-md-3 no-select">
+                          Contribute
+                        </span>
+                </div>
+                <div class="flex-even last-tab"
+                     (click)="cauldronContributionMenu = CauldronContributionMenuEnum.Withdraw"
+                     [ngClass]="{'inactive': cauldronContributionMenu == CauldronContributionMenuEnum.Contribute}">
+                    <span class="fw-bold fs-3 ms-md-3 no-select">
+                      Withdraw
+                    </span>
+                </div>
+              </div>
+            </div>
+            <div class="card-body px-4 py-4">
+              <div class="row gy-2">
+                <div class="col-md-6">
+                  <span class="fs-6 mb-2 d-block opacity-50">Your balance</span>
+                  <ng-container *ngIf="selectedToken != null">
+                    <span [@fadeInOnEnter] *ngIf="user && selectedTokenBalance" class="d-block fs-6 fw-bold mb-1">
+                      {{selectedTokenBalance | formatUnits:selectedToken.maximumDecimalsToDisplay:selectedToken.decimals}}
+                    </span>
+                    <ngx-skeleton-loader class="mb-1" [@fadeInOnEnter] *ngIf="user == null || selectedTokenBalance == null" [theme]="'standard' | skeleton:1" [animation]="user ? 'progress' : 'false'"></ngx-skeleton-loader>
+                    <span [@fadeInOnEnter] *ngIf="selectedTokenBalanceInUsd" class="d-block fs-6 fw-bold opacity-50 mb-1">
+                      ({{selectedTokenBalanceInUsd | currency:'USD':'symbol':'1.2-2'}})
+                    </span>
+                    <ngx-skeleton-loader class="mb-1" [@fadeInOnEnter] *ngIf="selectedTokenBalanceInUsd == null" [theme]="'standard' | skeleton:1" [animation]="user ? 'progress' : 'false'"></ngx-skeleton-loader>
+                  </ng-container>
+                  <span [@fadeInOnEnter] class="mb-1 fs-6 fw-bold d-block" *ngIf="selectedToken == null">
+                    ---
+                  </span>
+                  <span [@fadeInOnEnter] class="mb-1 fs-6 fw-bold d-block opacity-50" *ngIf="selectedToken == null">
+                    ---
+                  </span>
+                </div>
+                <div class="col-md-6">
+                  <span class="fs-6 mb-2 d-block opacity-50">Your stake</span>
+                  <ng-container *ngIf="selectedToken != null">
+                    <span [@fadeInOnEnter] *ngIf="user && selectedTokenUserInfo?.amountDeposited" class="mb-1 d-block fs-6 fw-bold">
+                      {{selectedTokenUserInfo!.amountDeposited! | formatUnits:selectedToken.maximumDecimalsToDisplay:selectedToken?.decimals}}
+                    </span>
+                    <ngx-skeleton-loader class="mb-1" [@fadeInOnEnter] *ngIf="user == null || selectedTokenUserInfo?.amountDeposited == null" [theme]="'standard' | skeleton:1" [animation]="user ? 'progress' : 'false'"></ngx-skeleton-loader>
+                    <span [@fadeInOnEnter] *ngIf="selectedTokenStakeInUsd" class="mb-1 d-block fs-6 fw-bold opacity-50">
+                      ({{selectedTokenStakeInUsd | currency:'USD':'symbol':'1.2-2'}})
+                    </span>
+                    <ngx-skeleton-loader class="mb-1" [@fadeInOnEnter] *ngIf="selectedTokenStakeInUsd == null" [theme]="'standard' | skeleton:1" [animation]="user ? 'progress' : 'false'"></ngx-skeleton-loader>
+                  </ng-container>
+                  <span [@fadeInOnEnter] class="mb-1 fs-6 fw-bold d-block" *ngIf="selectedToken == null">
+                    ---
+                  </span>
+                  <span [@fadeInOnEnter] class="mb-1 fs-6 fw-bold d-block opacity-50" *ngIf="selectedToken == null">
+                    ---
+                  </span>
+                </div>
+              </div>
+              <ng-container *ngIf="cauldronContributionMenu == CauldronContributionMenuEnum.Contribute">
+                <div *ngIf="user != null; else ContributionWalletConnection">
+                  <div *ngIf="loadingUserTokenAllowances == false; else LoadingAllowances">
+                    <div *ngIf="selectedTokenAllowance?.gte(minimumAllowanceToRequestApproval); else ApproveAllowance">
+                      <div class="row mt-2 gy-2 mb-2">
+                        <div class="col-md-7">
+                          <label for="contribution-amount" class="visually-hidden-focusable">Contribution amount</label>
+                          <nb-form-field>
+                            <input id="contribution-amount" fieldSize="large" nbInput shape="semi-round" fullWidth type="text" placeholder="0.0 {{selectedToken?.symbol}}" [formControl]="contributionAmountControl">
+                            <button nbSuffix size="small" nbButton shape="semi-round" class="me-2 btn-ghost" (click)="maxUserContributionBalance()" [disabled]="!user || loadingDepositTransaction">
+                              MAX
+                            </button>
+                          </nb-form-field>
+                          <div class="mt-2" *ngIf="contributionAmountControl.value && contributionAmountControl.invalid && (contributionAmountControl.dirty || contributionAmountControl.touched)">
+                            <small class="text-danger" *ngIf="contributionAmountControl.errors?.invalidValue">
+                              The provided amount is invalid
+                            </small>
+                            <small class="text-danger" *ngIf="contributionAmountControl.errors?.cannotBeZero">
+                              The amount must be higher than 0
+                            </small>
+                            <small class="text-danger" *ngIf="contributionAmountControl.errors?.exceedsBalance">
+                              This amount exceeds your balance
+                            </small>
+                          </div>
+                        </div>
+                        <div class="col-md-5">
+                          <button nbButton status="success" shape="round" size="large" fullWidth (click)="depositSelectedToken()" [disabled]="contributionAmountControl.invalid || loadingDepositTransaction" [nbSpinner]="loadingDepositTransaction" nbSpinnerMessage="Confirming">
+                              <span [ngStyle]="{'opacity': loadingDepositTransaction ? 0 : 1}">
+                                Contribute
+                              </span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <ng-template #ApproveAllowance>
+                      <div class="mt-3 mb-2">
+                        <button nbButton status="success" shape="round"
+                                size="large"
+                                *ngIf="!failedLoadingUserTokenAllowances"
+                                fullWidth (click)="approveSelectedTokenAllowance()"
+                                [disabled]="selectedToken == null || user == null || loadingApproveTokenAllowance"
+                                nbSpinnerMessage="Waiting Confirmation"
+                                [nbSpinner]="loadingApproveTokenAllowance">
+                          <span [ngStyle]="{'opacity': loadingApproveTokenAllowance ? 0 : 1}">Approve</span>
+                        </button>
+                        <div *ngIf="failedLoadingUserTokenAllowances">
+                          <button nbButton size="large" status="success" shape="round" fullWidth (click)="getUserTokenAllowance(selectedToken)">
+                            Reload Allowance
+                          </button>
+                          <div class="text-center">
+                            <small class="text-danger">We were unable to verify your allowance</small>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-template>
+                  </div>
+                  <ng-template #LoadingAllowances>
+                    <div class="mt-3">
+                      <button nbButton status="primary" size="large" shape="round" fullWidth [nbSpinner]="loadingUserTokenAllowances" nbSpinnerMessage="Loading Allowance" [disabled]="loadingUserTokenAllowances">
+                        <span style="opacity: 0">Approve</span>
+                      </button>
+                    </div>
+                  </ng-template>
+                </div>
+                <ng-template #ContributionWalletConnection>
+                  <div class="mt-3 mb-2">
+                    <app-connect-wallet-button size="large" [fullWidth]="true"></app-connect-wallet-button>
+                  </div>
+                </ng-template>
+              </ng-container>
+              <ng-container *ngIf="cauldronContributionMenu == CauldronContributionMenuEnum.Withdraw">
+                <div *ngIf="user != null; else WithdrawWalletConnection">
+                  <div>
+                    <div class="row mt-2 gy-2">
+                      <div class="col-md-7">
+                        <label for="withdraw-amount" class="visually-hidden-focusable">Withdraw amount</label>
+                        <nb-form-field>
+                          <input id="withdraw-amount" type="text" nbInput fieldSize="large" shape="semi-round" fullWidth placeholder="0.0 {{selectedToken?.symbol}}" [formControl]="withdrawAmountControl">
+                          <button nbSuffix size="small" nbButton shape="semi-round" class="me-2 btn-ghost" (click)="maxUserWithdrawBalance()" [disabled]="!user || loadingWithdrawTransaction">
+                            MAX
+                          </button>
+                        </nb-form-field>
+                        <div class="mt-2" *ngIf="withdrawAmountControl.value && withdrawAmountControl.invalid && (withdrawAmountControl.dirty || withdrawAmountControl.touched)">
+                          <small class="text-danger" *ngIf="withdrawAmountControl.errors?.invalidValue">
+                            The provided amount is invalid
+                          </small>
+                          <small class="text-danger" *ngIf="withdrawAmountControl.errors?.cannotBeZero">
+                            The amount must be higher than 0
+                          </small>
+                          <small class="text-danger" *ngIf="withdrawAmountControl.errors?.exceedsBalance">
+                            This amount exceeds your stake
+                          </small>
+                        </div>
+                      </div>
+                      <div class="col-md-5">
+                        <button nbButton size="large" status="success" shape="round" fullWidth (click)="withdrawSelectedToken()" [disabled]="withdrawAmountControl.invalid || loadingWithdrawTransaction" [nbSpinner]="loadingWithdrawTransaction" nbSpinnerMessage="Confirming">
+                          <span [ngStyle]="{'opacity': loadingWithdrawTransaction ? 0 : 1}">
+                            Withdraw
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="mt-2">
+                      <span class="ms-1 text-warning" *ngIf="selectedToken?.address == wavaxToken.address">
+                        Note: Your funds will be withdrawn as AVAX
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <ng-template #WithdrawWalletConnection>
+                  <div class="mt-3 mb-2">
+                    <app-connect-wallet-button size="large" [fullWidth]="true"></app-connect-wallet-button>
+                  </div>
+                </ng-template>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+        <div id="cauldron-contribute-arrow">
+          <svg width="124" height="119" viewBox="0 0 124 119" [attr.fill]="cauldronContributionMenu == CauldronContributionMenuEnum.Contribute ?  '#50CC94' : 'rgba(186,186,186,0.35)'" xmlns="http://www.w3.org/2000/svg">
+            <path d="M41.6013 30V57.5298H0L62.7034 119L124 58.9089H85.6143V30H41.6013Z"/>
+          </svg>
+        </div>
+      </div>
+      <div class="text-center mt-6">
+        <div class="p-4">
+          <img class="img-fluid" src="../../../assets/images/cauldron/animated-cauldron.gif" alt="Cauldron contribution">
+        </div>
+        <span (click)="openCauldronCompositionDialog()" class="d-block text-decoration-underline mt-3 fw-bold text-shamrock cursor-pointer">
+          > View composition
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

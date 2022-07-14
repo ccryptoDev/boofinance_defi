@@ -1,0 +1,268 @@
+<section>
+  <div class="text-center mt-3 mb-5">
+    <h1 class="d-inline-block home-heading">
+      Pioneering DeFi 3.0 on Avalanche
+    </h1>
+  </div>
+  <div class="row justify-content-center gy-5">
+    <div class="col-6 col-md-4">
+      <div class="position-relative text-center">
+        <img routerLink="/cauldron" src="../../../assets/images/home/cauldron-empty-frame.png" alt="Cauldron" class="img-fluid cursor-pointer">
+        <div id="cauldron-frame" class="m-lg-3 cursor-pointer" routerLink="/cauldron">
+          <img src="../../../assets/images/cauldron/animated-cauldron.gif" alt="Cauldron" class="img-fluid">
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-4">
+      <div class="position-relative text-center">
+        <img routerLink="/stake" src="../../../assets/images/home/stake-frame.png" alt="Stake" class="img-fluid cursor-pointer">
+      </div>
+    </div>
+    <div class="col-6 col-md-4">
+      <div class="position-relative text-center">
+        <img routerLink="/well-of-souls" src="../../../assets/images/home/well-of-souls-empty-frame.png" alt="Well of Souls" class="img-fluid cursor-pointer">
+        <div id="well-of-souls-frame" class="m-lg-3 cursor-pointer feature-frame" routerLink="/well-of-souls">
+          <img src="../../../assets/images/well-of-souls/well-of-souls.gif" alt="Well of Souls" class="img-fluid">
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-4">
+      <div class="position-relative text-center">
+        <img (click)="scrollToElement(GovernSectionSeparator)" src="../../../assets/images/home/govern-golden-frame.png" alt="Govern" class="img-fluid cursor-pointer">
+      </div>
+    </div>
+    <div class="col-6 col-md-4">
+      <div class="position-relative text-center">
+        <img (click)="scrollToElement(BattleSectionSeparator)" src="../../../assets/images/home/battle-golden-frame.png" alt="Battle" class="img-fluid cursor-pointer">
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="my-5 hr-dashed-shamrock">
+
+<section>
+  <h2 class="h1 my-5 text-center text-md-start">
+    Learn More
+  </h2>
+  <div class="row gy-5">
+    <div class="col-md-4 text-center">
+      <a class="cursor-pointer" href="https://boofinance.gitbook.io/boo-finance/introduction/why-avalanche" target="_blank">
+        <img src="../../../assets/images/home/avax-logo.png" alt="AVAX Logo" class="img-fluid" style="height: 128px">
+        <span class="mt-4 fw-bold lead d-block text-white">
+          Why Avalanche?
+        </span>
+      </a>
+    </div>
+    <div class="col-md-4 text-center">
+      <a class="cursor-pointer" href="https://boofinance.gitbook.io/boo-finance/tokenomics" target="_blank">
+        <img src="./assets/images/home/coins.png" alt="Tokenomics" class="img-fluid" style="height: 128px">
+        <span class="mt-4 fw-bold lead d-block text-white">
+          Tokenomics
+        </span>
+      </a>
+    </div>
+    <div class="col-md-4 text-center">
+      <a class="cursor-pointer" href="https://boofinance.gitbook.io/boo-finance" target="_blank">
+        <img src="./assets/images/home/documentation.png" alt="Documentation" class="img-fluid" style="height: 128px">
+        <span class="mt-4 fw-bold lead d-block text-white">
+          Documentation
+        </span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<hr class="my-5 hr-dashed-shamrock" #CauldronSectionSeparator>
+
+<section>
+  <div class="row">
+    <div class="col-md-4 text-center order-md-last">
+      <img src="../../../assets/images/cauldron/animated-cauldron.gif" alt="Cauldron" class="img-fluid" style="max-height: 240px">
+    </div>
+    <div class="col-md-8">
+      <h3 class="h1 mt-4">
+        Cauldron
+      </h3>
+      <span class="d-block paragraph-grey mb-4 fs-5 lh-base">
+        Our revolutionary new way to yield farm where you can brew your LP tokens, staked tokens, and even single tokens all in one place to receive zBOOFI rewards!
+      </span>
+      <div class="mt-3">
+        <a routerLink="/cauldron" class="text-decoration-underline text-success">
+          <span class="lead fw-bold text-shamrock">
+            > Brew in the Cauldron
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="my-5 hr-dashed-shamrock" #StakeSectionSeparator>
+
+<section>
+  <div class="row">
+    <div class="col-md-4 text-center order-md-first">
+      <img src="../../../assets/images/home/stake.png" alt="Stake" class="img-fluid">
+    </div>
+    <div class="col-md-8">
+      <h3 class="h1 mt-4">
+        Stake
+      </h3>
+      <span class="d-block paragraph-grey mb-4 fs-5 lh-base">
+        Stake your BOOFI to immediately receive zBOOFI! zBOOFI is your ticket to entering the Well of Souls!
+      </span>
+      <div class="mt-3">
+        <a routerLink="/stake" class="text-decoration-underline text-success">
+          <span class="lead fw-bold text-shamrock">
+            > Start Staking
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="my-5 hr-dashed-shamrock" #WellOfSoulsSeparator>
+
+<section>
+  <div class="row">
+    <div class="col-md-4 text-center order-md-last">
+      <img src="../../../assets/images/well-of-souls/well-of-souls.gif" alt="Well of Souls" class="img-fluid">
+    </div>
+    <div class="col-md-8">
+      <h3 class="h1 mt-4">
+        Well of Souls
+      </h3>
+      <span class="d-block paragraph-grey mb-4 fs-5 lh-base">
+        Stake your zBOOFI to enter the Well of Souls! Staking zBOOFI allows you to earn a percentage of all of the BOOFI rewards straight out of the Cauldron! Harvesting your BOOFI rewards places you in competition to be among the Top Necromancers. Top Necromancers gain tons of additional benefits!
+      </span>
+      <div class="mt-3">
+        <a routerLink="/well-of-souls" class="text-decoration-underline text-success">
+          <span class="lead fw-bold text-shamrock">
+            > Enter the Well of Souls
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="my-5 hr-dashed-shamrock" #GovernSectionSeparator>
+
+<section>
+  <div class="row">
+    <div class="col-md-4 text-center order-md-first">
+      <img src="../../../assets/images/home/govern-golden.png" alt="Stake" class="img-fluid">
+    </div>
+    <div class="col-md-8">
+      <h3 class="h1 mt-4">
+        Govern
+      </h3>
+      <span class="d-block paragraph-grey mb-4 fs-5 lh-base">
+        The Boo Council will be BooFinance's governance system. Since long-term investors hold zBOOFI rather than BOOFI, this will be the basis for voting on BooFinance's future. The greatest community of them all will meet to decide on the realm's most important topics.
+      </span>
+      <div class="mt-3">
+        <a class="text-success">
+          <span class="lead fw-bold text-shamrock">
+            MORE COMING SOON
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="my-5 hr-dashed-shamrock" #BattleSectionSeparator>
+
+<section>
+  <div class="row">
+    <div class="col-md-4 text-center order-md-last">
+      <img src="../../../assets/images/home/battle-golden.png" alt="Stake" class="img-fluid">
+    </div>
+    <div class="col-md-8">
+      <h3 class="h1 mt-4">
+        Battle
+      </h3>
+      <span class="d-block paragraph-grey mb-4 fs-5 lh-base">
+        Your NFTs will be imbued with AVAX and other tokens, meaning they will have intrinsic value. Be prepared for battle as millions will be at stake, lose and your NFT will disappear, Win, and you will reap all the value of your enemy's NFT.
+      </span>
+      <div class="mt-3">
+        <a class="text-success">
+          <span class="lead fw-bold text-shamrock">
+            COMING SOON
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="my-5 hr-dashed-shamrock">
+
+<div class="card-information mb-8">
+  <div class="card-body p-5 bg-light-transparency-a-15">
+    <div>
+      <div class="d-flex align-items-center">
+        <nb-icon pack="boofi" icon="puzzled" class="icon-xl"></nb-icon>
+        <span class="h3 ms-2 my-0">
+          How to Use  Boo Finance
+        </span>
+      </div>
+    </div>
+    <div class="row vertical-grid-gray-lg mt-5">
+      <div class="col-lg-3 px-lg-4">
+        <span class="h5 text-shamrock fw-normal mb-2">
+          Connect Wallet
+        </span>
+        <p class="lh-27">
+          Using the “Connect Wallet” button, connect your wallet to Boo Finance.
+        </p>
+        <hr class="hr-dashed-gray d-block d-lg-none my-3">
+      </div>
+      <div class="col-lg-3 px-lg-4">
+        <span class="h5 text-shamrock fw-normal">
+          Get Tokens
+        </span>
+        <p class="lh-27">
+          To use Boo Finance’s products you will either need BOOFI tokens, LP tokens, and/or a variety of single tokens such as AVAX or xJOE. Buy BOOFI <a class="lead fw-bold text-shamrock" href="https://traderjoexyz.com/trade?outputCurrency=0xb00f1ad977a949a3ccc389ca1d1282a2946963b0" target="_blank">here</a>.
+        </p>
+        <hr class="hr-dashed-gray d-block d-lg-none my-3">
+      </div>
+      <div class="col-lg-3 px-lg-4">
+        <span class="h5 text-shamrock fw-normal mb-2">
+          Stake your Tokens
+        </span>
+        <p class="lh-27">
+          To stake BOOFI, click on “Stake” to stake your tokens and directly receive zBOOFI in return.
+        </p>
+        <p class="lh-27">
+          To stake your LP Tokens or other single tokens, click on “Cauldron” to stake your tokens and earn zBOOFI rewards.
+        </p>
+        <hr class="hr-dashed-gray d-block d-lg-none my-3">
+      </div>
+      <div class="col-lg-3 px-lg-4">
+        <span class="h5 text-shamrock fw-normal mb-2">
+          Earn BOOFI Rewards!
+        </span>
+        <p class="lh-27">
+          To earn more BOOFI rewards, click “Well of Souls” to stake your zBOOFI tokens. Harvest to earn rewards and climb the leaderboard of Top Necromancers!
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="chatty-ghost">
+    <img src="./assets/images/general/boofi-ghost-chat.svg">
+  </div>
+</div>
+
+<hr class="my-5 hr-dashed-shamrock">
+
+<div class="text-center my-5 py-4">
+  <h3 class="fw-bolder home-heading">
+    Start Investing with BooFinance
+  </h3>
+  <p class="d-block h5 fw-normal mt-4">
+    Don’t be spooked of Avalanche and start earning with Boo
+  </p>
+</div>

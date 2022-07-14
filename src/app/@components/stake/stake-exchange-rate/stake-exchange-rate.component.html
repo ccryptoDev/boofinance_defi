@@ -1,0 +1,51 @@
+<div *ngIf="mode == 'zBOOFI->BOOFI'" class="d-flex">
+  <div class="me-1">
+    <span [@fadeInOnEnter] class="fs-5">
+      1 zBOOFI =
+    </span>
+  </div>
+  <div [@fadeInOnEnter] class="flex-grow-1" *ngIf="boofiStakingDetails?.zBoofiToBoofiExchangeRate != null">
+    <span class="d-inline fs-5">
+      {{boofiStakingDetails!.zBoofiToBoofiExchangeRate! | formatUnits}} BOOFI
+    </span>
+    <div class="d-inline mx-1">
+      <nb-icon icon="arrow-repeat" pack="boofi" class="cursor-pointer" (click)="mode = 'BOOFI->zBOOFI'"></nb-icon>
+    </div>
+  </div>
+  <div [@fadeInOnEnter] class="flex-grow-1" *ngIf="boofiStakingDetails?.zBoofiToBoofiExchangeRate == null">
+    <div class="d-flex">
+      <div class="d-inline mx-1 flex-fill">
+        <ngx-skeleton-loader [theme]="'standard' | skeleton:1.3" animation="progress"></ngx-skeleton-loader>
+      </div>
+      <div class="d-inline mx-1">
+        <nb-icon icon="arrow-repeat" pack="boofi" class="cursor-pointer" (click)="mode = 'zBOOFI->BOOFI'"></nb-icon>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="mode == 'BOOFI->zBOOFI'" class="d-flex">
+  <div class="me-1">
+    <span [@fadeInOnEnter] class="fs-5">
+      1 BOOFI =
+    </span>
+  </div>
+  <div [@fadeInOnEnter] class="flex-grow-1" *ngIf="boofiStakingDetails?.boofiToZBoofiExchangeRate != null">
+    <span class="d-inline fs-5">
+      {{boofiStakingDetails!.boofiToZBoofiExchangeRate! | formatUnits}} zBOOFI
+    </span>
+    <div class="d-inline mx-1">
+      <nb-icon icon="arrow-repeat" pack="boofi" class="cursor-pointer" (click)="mode = 'zBOOFI->BOOFI'"></nb-icon>
+    </div>
+  </div>
+  <div [@fadeInOnEnter] class="flex-grow-1" *ngIf="boofiStakingDetails?.boofiToZBoofiExchangeRate == null">
+    <div class="d-flex">
+      <div class="d-inline mx-1 flex-fill">
+        <ngx-skeleton-loader [theme]="'standard' | skeleton:1.3" animation="progress"></ngx-skeleton-loader>
+      </div>
+      <div class="d-inline mx-1">
+        <nb-icon icon="arrow-repeat" pack="boofi" class="cursor-pointer" (click)="mode = 'zBOOFI->BOOFI'"></nb-icon>
+      </div>
+    </div>
+  </div>
+</div>

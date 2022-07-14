@@ -1,0 +1,295 @@
+<app-card-information-toggle
+ [displayHelp]="userConfiguration?.helpToggles?.howToUseBattle"
+ (onHelpToggled)="onHelpToggled()"
+ bodyClasses="bg-light-transparency-gradient border-light-transparent py-4"
+ bodyTitle="Battle"
+ bodyImageUrl="../../../assets/images/vault/vault-golden.png"
+ bodyDescription="Your NFTs will be imbued with AVAX and other tokens, meaning they will have intrinsic value. Be prepared for battle as millions will be at stake, lose and your NFT will disappear, Win, and you will reap all the value of your enemies NFT."
+ toggleHelpTitle="How to Battle"
+>
+  <div class="row vertical-grid-gray-lg mt-5">
+    <div class="col-lg-4 px-lg-4">
+      <span class="h5 text-shamrock fw-normal mb-2">
+        Select a NFT
+      </span>
+      <p class="lh-27">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi velit risus morbi sollicitudin imperdiet est volutpat. Habitasse viverra quis velit mattis. Habitasse egestas vel vulputate pellentesque in suspendisse a pretium amet. Aliquet accumsan sed et morbi. Egestas arcu tincidunt varius leo.
+      </p>
+      <hr class="hr-dashed-gray d-block d-lg-none my-3">
+    </div>
+    <div class="col-lg-4 px-lg-4">
+      <span class="h5 text-shamrock fw-normal">
+        Plan your attack
+      </span>
+      <p class="lh-27">
+        Mattis risus sed tellus consectetur maecenas eget lacus pellentesque. Viverra urna, eu ante volutpat vitae dui. Lacus, nulla blandit pharetra cursus cursus. Odio arcu, enim, pharetra viverra. Ut est gravida sed consectetur. Pellentesque tincidunt interdum morbi at venenatis. Mattis amet, pharetra pretium, pharetra erat est. Id.
+      </p>
+      <hr class="hr-dashed-gray d-block d-lg-none my-3">
+    </div>
+    <div class="col-lg-4 px-lg-4">
+      <span class="h5 text-shamrock fw-normal mb-2">
+        View Cauldron
+      </span>
+      <p class="lh-27">
+        Nam malesuada sed in vulputate luctus id aliquet in. Mauris fusce ut commodo aliquam integer turpis. Nisi at id vitae ipsum molestie tempus sapien. Magna nibh orci accumsan, lobortis eu. Et sit interdum sit lobortis aliquam nunc, faucibus vel. Sem nunc sed nulla tincidunt nibh elit purus nulla. Ultricies ullamcorper.
+      </p>
+    </div>
+  </div>
+</app-card-information-toggle>
+
+<div class="div mb-4 mt-5">
+  <div class="card-rounded bg-light-transparency-a-19 mt-4">
+    <div class="card-header">
+      <div class="card-rounded-tabs d-flex justify-content-between">
+        <div class="flex-even first-tab">
+          <span class="fw-bold fs-3 ms-md-3 no-select">
+            NFTs
+          </span>
+        </div>
+        <div class="flex-even last-tab inactive">
+          <span class="fw-bold fs-3 ms-md-3 no-select">
+            Battle
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="card-body d-flex gx-lg-5 row vertical-grid-shamrock-lg">
+      <div class="col-lg-6"> <!-- user NFTs and new NFTs -->
+        <h3 class="h6 text-shamrock">
+          Your NFTs
+        </h3>
+        <div class="d-flex flex-wrap justify-content-start mt-3">
+          <div class="me-2 me-md-3 me-lg-4 mb-2">
+            <span class="text-white opacity-50 text-nowrap">
+              Filter by:
+            </span>
+          </div>
+          <div class="d-flex mb-2">
+            <div class="me-1 me-md-2 me-lg-3">
+              <span class="{{battleTokenSelectionMenu == BattleTokenSelectionMenuEnum.Param1 ? 'fw-bold text-white' : 'opacity-50 cursor-pointer text-nowrap'}} no-select"
+                (click)="setTokenSelectionTab(BattleTokenSelectionMenuEnum.Param1)">
+                Param1
+              </span>
+            </div>
+            <span class="me-1 me-md-2 me-lg-3 opacity-50">
+              &verbar;
+            </span>
+            <div class="me-1 me-md-2 me-lg-3">
+              <span class="{{battleTokenSelectionMenu == BattleTokenSelectionMenuEnum.Param2 ? 'fw-bold text-white' : 'opacity-50 cursor-pointer text-nowrap'}} no-select"
+                    (click)="setTokenSelectionTab(BattleTokenSelectionMenuEnum.Param2)">
+                Param2
+              </span>
+            </div>
+            <span class="me-1 me-md-2 me-lg-3 opacity-50">
+              &verbar;
+            </span>
+            <div>
+              <span class="{{battleTokenSelectionMenu == BattleTokenSelectionMenuEnum.Param3 ? 'fw-bold text-white' : 'opacity-50 cursor-pointer text-nowrap'}} no-select"
+                    (click)="setTokenSelectionTab(BattleTokenSelectionMenuEnum.Param3)">
+                Param3
+              </span>
+            </div>
+          </div>
+        </div>
+        <ng-container [ngSwitch]="battleTokenSelectionMenu">
+          <div [nbSpinner]="loadingUserTokens" nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading your tokens..." class="row gy-4" [ngClass]="{'py-5': loadingUserTokens}">
+            <ng-container *ngIf="user; else UserDisconnected">
+              <ng-container *ngIf="userTokens && userTokens?.size! > 0; else UserHasNoTokens">
+                <ng-container *ngSwitchCase="BattleTokenSelectionMenuEnum.Param1">
+                  <div [@fadeInOnEnter]>
+                    <div class="row gy-4 mt-2">
+                      <ng-container *ngFor="let token of userTokens | filterNFTs:'param1' | keyvalue">
+                        <div class="col-4 col-sm-3 col-xxl-3 text-center">
+                          <app-nft-preview class="cursor-pointer" 
+                                          [token]="token.value"
+                                          [userNft]="true">
+                          </app-nft-preview>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                </ng-container> <!-- in case of Param1 -->
+                
+                <ng-container *ngSwitchCase="BattleTokenSelectionMenuEnum.Param2">
+                  <div [@fadeInOnEnter]>
+                    <div class="row gy-4 mt-2">
+                      <ng-container *ngFor="let token of userTokens | filterNFTs:'param2' | keyvalue">
+                        <div class="col-4 col-sm-3 col-xxl-3 text-center">
+                          <app-nft-preview class="cursor-pointer" 
+                                          [token]="token.value"
+                                          [userNft]="true">
+                          </app-nft-preview>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                </ng-container> <!-- in case of Param2 -->
+                <ng-container *ngSwitchCase="BattleTokenSelectionMenuEnum.Param3">
+                  <div [@fadeInOnEnter]>
+                    <div class="row gy-4">
+                      <ng-container *ngFor="let token of userTokens | filterNFTs:'param3' | keyvalue">
+                        <div [@fadeInOnEnter] class="col-4 col-sm-3 col-xxl-3 text-center">
+                          <app-nft-preview class="cursor-pointer" 
+                                          [token]="token.value"
+                                          [userNft]="true">
+                          </app-nft-preview>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                </ng-container> <!-- in case of Param3 -->
+              </ng-container> <!-- no user NFT -->
+            </ng-container> <!-- not connected -->
+          </div>
+
+          <ng-template #UserHasNoTokens>
+            <div *ngIf="!loadingUserTokens" class="opacity-50 text-center py-4 fs-5">
+              You don't have any token available yet
+            </div>
+          </ng-template>
+          <ng-template #UserDisconnected>
+            <div class="opacity-50 text-center py-4 fs-5">
+              Connect your wallet to see your tokens
+            </div>
+          </ng-template>
+        </ng-container> <!-- user NFTs -->
+
+        <h3 class="h6 text-shamrock mt-5">
+          or purchase a new NFT
+        </h3>
+        <div [nbSpinner]="loadingUserTokens" nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading new NFTs..." class="row gy-4" [ngClass]="{'py-5': loadingUserTokens}">
+          <ng-container *ngIf="newTokens && newTokens?.size! > 0; else NoNewTokens">
+            <div [@fadeInOnEnter]>
+              <div class="row gy-4 mt-2">
+                <ng-container *ngFor="let nft of newTokens | keyvalue | paginate: paginationConfig('newToken', newTokensCurrentPage)">
+                  <div class="col-4 col-sm-3 col-xxl-3 text-center">
+                    <app-nft-preview class="cursor-pointer" 
+                                    [token]="nft.value"
+                                    [userNft]="false"
+                                    (onBuyToken)="onBuyToken($event)"
+                    >
+                    </app-nft-preview>
+                  </div>
+                </ng-container>
+              </div>
+              <div class="text-center mt-5">
+                <pagination-controls
+                  id="newToken"
+                  [autoHide]="true"
+                  [responsive]="true"
+                  (pageChange)="newTokensCurrentPage = $event"
+                ></pagination-controls>
+              </div>
+            </div>
+          </ng-container>
+          <ng-template #NoNewTokens>
+            <div *ngIf="!loadingNewTokens" class="opacity-50 text-center py-4 fs-5">
+              There is no yet new token!
+            </div>
+          </ng-template>
+        </div>
+      </div> <!-- user NFTs and new NFTs -->
+
+      <div class="col-lg-6"> <!-- Mint area -->
+        <hr class="d-block hr-dashed-shamrock d-lg-none my-4">
+        <h3 class="h6 text-shamrock">
+          Mint a new NFT
+        </h3>
+        <ng-container [ngSwitch]="battleMintProcessMenu">
+          <ng-container *ngSwitchCase="BattleMintProcessMenuEnum.Mint">
+            <div [nbSpinner]="progressingMint" nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Minting...">
+              <div class="mint-block" [ngStyle]="{'opacity': progressingMint ? 0.3: 1}">
+                <h6 class="fw-normal text-center">Your new NFT?</h6>
+                <div class="mint-placeholder text-center">
+                  <img src="./assets/images/battle/mint-placeholder.png" alt="">
+                </div>
+                <div class="mint-cost">
+                  <p>Cost</p>
+                  <span class="boofi-format">{{ nftCost | number:'1.0':'en-US' }} Boofi</span><span>&nbsp;&nbsp; ({{nftCost | currency:'USD':'symbol':'1.0-0'}})</span>
+                </div>
+              </div>
+            </div>
+            <div class="mint-btn text-center">
+              <button class="fw-bold" (click)="onMint()" status="success" shape="round"
+                      nbSpinnerMessage="Minting..." [nbSpinner]="progressingMint"
+              >
+                <span [ngStyle]="{'opacity': progressingMint? 0 : 1}">Mint</span>
+              </button>
+            </div>
+          </ng-container> <!-- Mint -->
+          <ng-container *ngSwitchCase="BattleMintProcessMenuEnum.DelayingAfterMint">
+            <div class="mint-block delaying">
+              <div class="mint-placeholder text-center">
+                <img src="./assets/images/battle/animation-before-unlock.png" alt="">
+              </div>
+            </div>
+            <div class="mint-btn text-center">
+              <button class="fw-bold disable" disabled>
+                <span>UNLOCK</span>
+              </button>
+            </div>
+          </ng-container> <!-- Delay after Minting -->
+          <ng-container *ngSwitchCase="BattleMintProcessMenuEnum.Unlock">
+            <div [nbSpinner]="progressingUnlock" nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Unlocking...">
+              <div class="unlock-block" [ngStyle]="{'opacity': progressingUnlock ? 0.3: 1}">
+                <div class="text-center">
+                  <img src="./assets/images/battle/minted.png" alt="">
+                </div>
+                <div class="stat-block">
+                  <div class="stat-item">
+                    <h6 class="stat-label">Statistic 1</h6>
+                    <div class="stat-info">
+                      <div class="bar">
+                        <div [ngStyle]="{'width': '50%'}"></div> <!-- change with into the real value later -->
+                      </div>
+                      <div class="stats">{{ statistic1 | number:'1.0':'en-US' }}</div>
+                    </div>
+                  </div>
+                  <hr class="d-block">
+                  <div class="stat-item">
+                    <h6 class="stat-label">Stattistic 2</h6>
+                    <div class="stat-info">
+                      <div class="bar">
+                        <div [ngStyle]="{'width': '50%'}"></div> <!-- change with into the real value later -->
+                      </div>
+                      <div class="stats">{{ statistic2 | number:'1.0':'en-US' }}</div>
+                    </div>
+                  </div>
+                  <hr class="d-block">
+                  <div class="stat-item">
+                    <h6 class="stat-label">statistic 3</h6>
+                    <div class="stat-info">
+                      <div class="bar">
+                        <div [ngStyle]="{'width': '50%'}"></div>
+                      </div>
+                      <div class="stats">{{ statistic3 | number:'1.0':'en-US' }}</div> <!-- change with into the real value later -->
+                    </div>
+                  </div>
+                  <hr class="d-block">
+                  <div class="stat-item">
+                    <h6 class="stat-label">Rank</h6>
+                    <div class="stat-info">
+                      <div class="stats">#{{ rank }}/785</div> <!-- change value into the real one later -->
+                    </div>
+                  </div>
+                  <hr class="d-block">
+                </div>
+              </div>
+            </div>
+            <div class="mint-btn text-center">
+              <button class="fw-bold" (click)="onUnlock()" status="success" shape="round"
+                      nbSpinnerMessage="Unlocking..." [nbSpinner]="progressingUnlock"
+              >
+                <span [ngStyle]="{'opacity': progressingUnlock? 0 : 1}">UNLOCK</span>
+              </button>
+            </div>
+          </ng-container> <!-- Unlock -->
+        </ng-container>
+        <p class="mt-5">
+          Nam malesuada sed in vulputate luctus id aliquet in. Mauris fusce ut commodo aliquam integer turpis. Nisi at id vitae ipsum molestie tempus sapien. Magna nibh orci accumsan, lobortis eu. Et sit interdum sit lobortis aliquam nunc, faucibus vel. Sem nunc sed nulla tincidunt nibh elit purus nulla. Ultricies ullamcorper.
+        </p>
+        <h6 class="h6 text-center text-shamrock mt-4">{{ totalSupply | number:'1.0':'en-US' }} NFT Minted</h6>
+      </div> <!-- Mint area -->
+    </div>
+  </div>
+</div>

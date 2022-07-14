@@ -1,0 +1,110 @@
+<div class="card-rounded border-light-transparent bg-light-transparency-gradient">
+  <div class="card-body py-4 position-relative">
+    <nb-icon routerLink="/well-of-souls" icon="arrow-circle-left-outline" class="cursor-pointer icon-xl position-absolute opacity-50" style="left: 20px; top: 20px"></nb-icon>
+    <div class="row gy-3 align-items-center">
+      <div class="text-center col-lg-3">
+        <app-avatar-preview *ngIf="user" size="lg" [backgroundHexColor]="backGroundColorControl.value" [avatar]="avatarControl.value"></app-avatar-preview>
+        <ngx-skeleton-loader [@fadeInOnEnter] *ngIf="user == null" [theme]="'circle' | skeleton:136" appearance="circle" [animation]="user ? 'pulse' : 'false'"></ngx-skeleton-loader>
+      </div>
+      <div class="text-center text-lg-start col-lg-9">
+        <div>
+          <div *ngIf="user else DefaultNickName">
+            <span *ngIf="nicknameControl.value else DefaultNickName" [@fadeInOnEnter] class="h1 py-0 my-0">
+              {{nicknameControl.value | lowercase}}
+            </span>
+          </div>
+          <ng-template #DefaultNickName>
+              <span [@fadeInOnEnter] class="h1 py-0 my-0 opacity-50">
+                Unknown Ghost
+              </span>
+          </ng-template>
+          <div class="mt-2">
+            <span [@fadeInOnEnter] class="fw-bold text-white fs-6" *ngIf="user">
+              {{user.address}}
+            </span>
+            <span [@fadeInOnEnter] class="fw-bold text-warning fs-6" *ngIf="user == null">
+              Connect your wallet to update your profile.
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="user" [@fadeInOnEnter] class="card-rounded bg-light-transparency-a-19 mt-4 mb-3">
+  <div class="card-body m-3" [formGroup]="form">
+    <div class="row gy-4 gx-lg-5 vertical-grid-shamrock-lg" [nbSpinner]="false" nbSpinnerStatus="success" nbSpinnerMessage="Loading Composition">
+      <div class="col-lg-6">
+        <div class="mb-4">
+          <div class="mb-4">
+            <span class="h3 text-shamrock">Choose a Nickname</span>
+          </div>
+          <input nbInput fullWidth shape="semi-round" type="text" fieldSize="large" placeholder="Unknown Ghost" formControlName="nickname" [status]="nicknameControl.value && nicknameControl.invalid && (nicknameControl.dirty || nicknameControl.touched) ? 'danger' : 'basic'">
+          <div class="mt-2" *ngIf="nicknameControl.value && nicknameControl.invalid && (nicknameControl.dirty || nicknameControl.touched)">
+            <small class="d-block text-danger" *ngIf="nicknameControl.errors?.required">
+              The Nickname is required.
+            </small>
+            <small class="d-block text-danger" *ngIf="nicknameControl.errors?.minlength">
+              The Nickname must have at least 3 characters.
+            </small>
+            <small class="d-block text-danger" *ngIf="nicknameControl.errors?.maxlength">
+              The Nickname cannot exceed 16 characters.
+            </small>
+            <small class="d-block text-danger" *ngIf="nicknameControl.errors?.forbiddenCharacters">
+              Please only use Alphanumeric characters.
+            </small>
+            <small class="d-block text-danger" *ngIf="nicknameControl.errors?.alreadyInUse">
+              This nickname is already in use
+            </small>
+            <small class="d-block text-danger" *ngIf="nicknameControl.errors?.swearWords">
+              Please avoid using swear words on your nickname
+            </small>
+          </div>
+        </div>
+        <div class="mb-4">
+          <span class="h3 text-shamrock">Select an Avatar</span>
+        </div>
+        <div class="row gy-4">
+          <ng-container *ngFor="let avatar of ProfileAvatarEnum | enumToArray">
+            <div *ngIf="ProfileAvatarEnum.None != avatar.value" class="col-4 col-sm-3 col-xxl-2 text-center">
+              <app-avatar-preview size="sm" [avatar]="avatar.value" [selected]="avatar.value == avatarControl.value" [selectable]="true" backgroundHexColor="#363636" (click)="updateAvatar(avatar.value)"></app-avatar-preview>
+            </div>
+          </ng-container>
+        </div>
+        <div class="mt-2" *ngIf="avatarControl.value && avatarControl.invalid && (avatarControl.dirty || avatarControl.touched)">
+          <small class="d-block text-danger" *ngIf="avatarControl.errors?.required">
+            The Avatar is required.
+          </small>
+          <small class="d-block text-danger" *ngIf="avatarControl.errors?.invalidEnum">
+            The Avatar is invalid.
+          </small>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="mb-4">
+          <span class="h3 text-shamrock">Select a Color</span>
+        </div>
+        <div class="row gy-4">
+          <div class="col-4 col-sm-3 col-xxl-2 text-center" *ngFor="let backgroundColor of defaultBackgroundColors">
+            <app-avatar-preview size="sm" [avatar]="ProfileAvatarEnum.None" [selected]="backgroundColor == backGroundColorControl.value" [selectable]="true" [backgroundHexColor]="backgroundColor" (click)="updateBackgroundColor(backgroundColor)"></app-avatar-preview>
+          </div>
+        </div>
+        <div class="mt-2" *ngIf="backGroundColorControl.value && backGroundColorControl.invalid && (backGroundColorControl.dirty || backGroundColorControl.touched)">
+          <small class="d-block text-danger" *ngIf="backGroundColorControl.errors?.required">
+            The Color is required.
+          </small>
+          <small class="d-block text-danger" *ngIf="backGroundColorControl.errors?.invalidHexColor">
+            The Color is invalid.
+          </small>
+        </div>
+      </div>
+    </div>
+    <div class="text-center mt-5">
+      <button nbButton status="success" shape="round" size="large" class="px-5" (click)="submitUserProfile()" nbSpinnerMessage="Confirming"
+              [nbSpinner]="loadingUserDataUpdate" [disabled]="form.invalid || loadingUserDataUpdate">
+        <span [ngStyle]="{'opacity': loadingUserDataUpdate ? 0 : 1}">Save changes</span>
+      </button>
+    </div>
+  </div>
+</div>

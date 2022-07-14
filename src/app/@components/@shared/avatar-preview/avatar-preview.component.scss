@@ -1,0 +1,43 @@
+.avatar-container {
+  border-radius:50%;
+  &.avatar-size-xs {
+    padding: 6px;
+    width: 38px;
+    height: 38px;
+    img {
+      width: 26px;
+      height: 26px;
+    }
+  }
+  &.avatar-size-sm {
+    padding: 10px;
+    width: 68px;
+    height: 68px;
+    img {
+      width: 48px;
+      height: 48px;
+    }
+  }
+  &.avatar-size-md {
+    padding: 15px;
+    width: 96px;
+    height: 96px;
+    img {
+      width: 64px;
+      height: 64px;
+    }
+  }
+  &.avatar-size-lg {
+    padding: 20px;
+    width: 136px;
+    height: 136px;
+    img {
+      width: 96px;
+      height: 96px;
+    }
+  }
+  &.selected {
+    outline: 4px solid #FFFFFF;
+    outline-offset: 2px;
+  }
+}

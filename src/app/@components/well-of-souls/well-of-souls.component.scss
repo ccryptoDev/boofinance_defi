@@ -1,0 +1,29 @@
+.active-user-leaderboard-table-data {
+  background-color: rgba(80, 204, 148, 0.16);
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.active-user-leaderboard-card-data {
+  background-color: rgba(80, 204, 148, 0.16);
+  box-shadow: rgba(0, 0, 0, 0.65) 0 0 35px inset;
+}
+
+.active-user-leaderboard-table-data:hover {
+  background-color: #39DB93;
+  opacity: 0.6;
+}
+
+.active-user-leaderboard-table-data:hover td, .active-user-leaderboard-table-data:hover span {
+  color: #ffffff !important;
+  font-weight: bold;
+}
+
+.user-rank {
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.user-rank:hover {
+  opacity: 0.5;
+}

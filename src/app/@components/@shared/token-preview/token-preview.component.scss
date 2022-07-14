@@ -1,0 +1,131 @@
+:host {
+  --token-glow: #AFFFAB;
+}
+
+.token {
+  max-width: 48px;
+  border-radius:50%;
+  -moz-border-radius:50%;
+  -webkit-border-radius:50%;
+  position: relative;
+}
+
+.token-logo-container {
+  width: 48px;
+  position: relative;
+}
+
+.lp-token-pair-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.lp-token-hot-icon-container {
+  position: absolute;
+  right: -9px;
+  top: -10px;
+  img {
+    width: 24px;
+  }
+}
+
+.lp-token-new-icon-container {
+  position: absolute;
+  left: -3px;
+  top: -10px;
+}
+
+.lp-token-deposited-icon-container {
+  position: absolute;
+  right: -12px;
+  bottom: 14px;
+  img {
+    width: 26px;
+  }
+}
+
+.token-deposited-icon-container {
+  position: absolute;
+  right: -12px;
+  bottom: -6px;
+  img {
+    width: 26px;
+  }
+}
+
+.token-new-icon-container {
+  position: absolute;
+  left: -5px;
+  top: -10px;
+}
+
+.lp-token-icon {
+  max-width: 48px;
+  margin-left: -21px;
+  border-radius:50%;
+  -moz-border-radius:50%;
+  -webkit-border-radius:50%;
+  position: relative;
+}
+
+.selected {
+  outline: 4px solid #50CC94;
+  outline-offset: 2px;
+}
+
+.selected-lp {
+  outline: 4px solid #50CC94;
+  outline-offset: 5px;
+  border-radius: 20%;
+  -moz-border-radius: 20%;
+  -webkit-border-radius: 20%;
+}
+
+.no-logo-container {
+  width: 48px;
+  height: 48px;
+  border-radius: 25px;
+  border: 2px solid #788480;
+}
+
+.logo-container {
+  position: relative;
+  display: inline-block;
+  //height: 70px;
+}
+
+.lp-logo-container {
+  width: 80px;
+  display: inline-block;
+  //height: 70px;
+}
+
+.no-logo-text {
+  left: 0;
+  right: 0;
+  top: 12px;
+  font-size: 8px;
+  overflow: hidden;
+}
+
+.lp-token-glow:before {
+  content: "";
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  top: -15px; //adjust your positioning as necessary
+  z-index: 0;
+  background: radial-gradient(50% 50% at 50% 50%, var(--token-glow) 0%, rgba(175, 255, 171, 0) 100%) no-repeat;
+}
+
+.token-glow:before {
+  content: "";
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  top: -15px; //adjust your positioning as necessary
+  left: -16px;
+  z-index: 0;
+  background: radial-gradient(50% 50% at 50% 50%, var(--token-glow) 0%, rgba(175, 255, 171, 0) 100%) no-repeat;
+}

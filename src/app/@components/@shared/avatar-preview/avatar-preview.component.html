@@ -1,0 +1,3 @@
+<div class="avatar-container d-inline-block avatar-size-{{size}}" [style.background]="backgroundHexColor ? backgroundHexColor : defaultBackgroundColor" [ngClass]="{'cursor-pointer': selectable, 'selected': selected}">
+  <img *ngIf="avatar != ProfileAvatarEnum.None" [src]="'./assets/images/profile/avatar/' + (avatar ? avatar : defaultAvatar)" alt="">
+</div>

@@ -1,0 +1,16 @@
+@import 'styles/variables';
+@import '~bootstrap/scss/bootstrap';
+@import 'styles/nebular';
+@import 'styles/layout';
+@import 'styles/general';
+@import 'styles/backgrounds';
+@import 'styles/icons';
+@import 'styles/frames';
+@import 'styles/pagination';
+@import 'styles/cauldron';
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+* {
+    font-family: 'Inter', sans-serif !important;
+  }

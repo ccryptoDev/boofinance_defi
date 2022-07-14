@@ -1,0 +1,4 @@
+<button nbButton shape="round" [size]="size" [status]="status" type="button" class="fw-bold {{classes}}" [disabled]="loadingWalletConnection"
+        (click)="connectWallet()" [nbSpinner]="loadingWalletConnection" [ngClass]="{'disabled': loadingWalletConnection}" [fullWidth]="fullWidth">
+  {{message}}
+</button>

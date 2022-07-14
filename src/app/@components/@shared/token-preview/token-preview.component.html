@@ -1,0 +1,67 @@
+<ng-container *ngIf="token">
+  <div class="logo-container" *ngIf="token.liquidityPairDetails == null; else LPToken">
+    <div class="token-logo-container" [ngClass]="{'token-glow': token.displayAsHotToken}" [style.--token-glow]="tokenGlowColor">
+      <img class="token" [ngClass]="{'selected': selected}" *ngIf="token.logoURI && !tokenLogoError; else NoLogo" [src]="token.logoURI" [alt]="token.symbol" (error)="tokenLogoError = true">
+      <ng-template #NoLogo>
+        <div class="position-relative text-center no-logo-container" [ngClass]="{'selected': selected}">
+        <span class="position-absolute no-logo-text opacity-50">
+          {{token.symbol | slice:0:8}}
+        </span>
+        </div>
+      </ng-template>
+      <div class="token-deposited-icon-container" *ngIf="displayStakedDecorator">
+        <img src="./assets/images/general/token-staked-icon.svg">
+      </div>
+      <div class="token-new-icon-container" *ngIf="token.displayAsNewToken == true">
+        <small class="badge rounded-pill bg-success p-1 fs-tiny">NEW</small>
+      </div>
+    </div>
+    <div class="text-center" *ngIf="displayTokenSymbolOrLPSource">
+      <span class="small fw-bold opacity-50">
+        {{token.symbol.trim()}}
+      </span>
+    </div>
+  </div>
+  <ng-template #LPToken>
+    <div class="text-start position-relative lp-logo-container" [ngClass]="{'selected-lp': selected, 'lp-token-glow': token.displayAsHotToken}" [style.--token-glow]="tokenGlowColor">
+      <div>
+        <img class="token" *ngIf="token.logoURI && !tokenLogoError; else NoLogo" [src]="token.logoURI" [alt]="token.symbol" (error)="tokenLogoError = true">
+        <ng-template #NoLogo>
+          <div class="d-inline-block">
+            <div class="position-relative text-center no-logo-container">
+            <span class="position-absolute no-logo-text opacity-50">
+              {{token.symbol.substring(0, token.symbol.indexOf('/')) | slice:0:8}}
+            </span>
+            </div>
+          </div>
+        </ng-template>
+        <div class="lp-token-pair-container">
+          <img class="lp-token-icon" *ngIf="token.liquidityPairDetails?.pairLogoURI && !lpTokenLogoError; else NoLpLogo" [src]="token.liquidityPairDetails?.pairLogoURI" (error)="lpTokenLogoError = true">
+          <ng-template #NoLpLogo>
+            <div class="d-inline-block">
+              <div class="position-relative text-center no-logo-container">
+              <span class="position-absolute no-logo-text opacity-50">
+                {{token.symbol.substring(token.symbol.indexOf('/') + 1) | slice:0:8}}
+              </span>
+              </div>
+            </div>
+          </ng-template>
+        </div>
+        <div class="lp-token-new-icon-container" *ngIf="token.displayAsNewToken == true">
+          <small class="badge rounded-pill bg-success p-1 fs-tiny">NEW</small>
+        </div>
+        <div class="lp-token-hot-icon-container" *ngIf="token.displayAsHotToken == true">
+          <img src="./assets/images/general/green-flame.svg">
+        </div>
+        <div class="lp-token-deposited-icon-container" *ngIf="displayStakedDecorator">
+          <img src="./assets/images/general/token-staked-icon.svg">
+        </div>
+      </div>
+      <div class="text-center" *ngIf="displayTokenSymbolOrLPSource">
+        <span class="small fw-bold opacity-50">
+          {{token.name.trim()}}
+        </span>
+      </div>
+    </div>
+  </ng-template>
+</ng-container>
